@@ -8,6 +8,7 @@ import (
 	oldmonkv1 "github.com/evalsocket/oldmonk/pkg/apis/oldmonk/v1"
 
 	"github.com/evalsocket/oldmonk/x/scalex"
+	"github.com/evalsocket/oldmonk/x"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	appsv1 "k8s.io/api/apps/v1"
@@ -115,7 +116,7 @@ func (r *ReconcileQueueAutoScaler) Reconcile(request reconcile.Request) (reconci
 	// indicated by the deletion timestamp being set.
 	isAutoScalerMarkedToBeDeleted := queueAutoScaler.GetDeletionTimestamp() != nil
 	if isAutoScalerMarkedToBeDeleted {
-		if contains(queueAutoScaler.GetFinalizers(), queueAutoScalerFinalizer) {
+		if x.Contains(queueAutoScaler.GetFinalizers(), queueAutoScalerFinalizer) {
 			// Run finalization logic for queueAutoScalerFinalizer. If the
 			// finalization logic fails, don't remove the finalizer so
 			// that we can retry during the next reconciliation.
@@ -125,7 +126,7 @@ func (r *ReconcileQueueAutoScaler) Reconcile(request reconcile.Request) (reconci
 
 			// Remove queueAutoScalerFinalizer. Once all finalizers have been
 			// removed, the object will be deleted.
-			queueAutoScaler.SetFinalizers(remove(queueAutoScaler.GetFinalizers(), queueAutoScalerFinalizer))
+			queueAutoScaler.SetFinalizers(x.Remove(queueAutoScaler.GetFinalizers(), queueAutoScalerFinalizer))
 			err := r.client.Update(context.TODO(), queueAutoScaler)
 			if err != nil {
 				return reconcile.Result{}, err
@@ -176,14 +177,14 @@ func (r *ReconcileQueueAutoScaler) Reconcile(request reconcile.Request) (reconci
 		podList := &corev1.PodList{}
 		listOpts := []client.ListOption{
 			client.InNamespace(queueAutoScaler.Namespace),
-			client.MatchingLabels(getLabels(queueAutoScaler).Spec.Labels),
+			client.MatchingLabels(x.GetLabels(queueAutoScaler).Spec.Labels),
 		}
 		err = r.client.List(context.TODO(), podList, listOpts...)
 		if err != nil {
 			reqLogger.Error(err, "Failed to list pods.", "QueueAutoScaler.Namespace", queueAutoScaler.Namespace, "QueueAutoScaler.Name", queueAutoScaler.Name)
 			return reconcile.Result{}, err
 		}
-		podNames := getPodNames(podList.Items)
+		podNames := x.GetPodNames(podList.Items)
 
 		// Update status.Nodes if needed
 		if !reflect.DeepEqual(podNames, queueAutoScaler.Status.Nodes) {
@@ -197,7 +198,7 @@ func (r *ReconcileQueueAutoScaler) Reconcile(request reconcile.Request) (reconci
 	}
 
 	// Add finalizer for this CR
-	if !contains(queueAutoScaler.GetFinalizers(), queueAutoScalerFinalizer) {
+	if !x.Contains(queueAutoScaler.GetFinalizers(), queueAutoScalerFinalizer) {
 		if err := r.addFinalizer(queueAutoScaler); err != nil {
 			return reconcile.Result{}, err
 		}
@@ -222,11 +223,11 @@ func (r *ReconcileQueueAutoScaler) deploymentForDeployment(m *oldmonkv1.QueueAut
 			Replicas: &m.Spec.MinPods,
 			Strategy: m.Spec.Strategy,
 			Selector: &metav1.LabelSelector{
-				MatchLabels: getLabels(m).Spec.Labels,
+				MatchLabels: x.GetLabels(m).Spec.Labels,
 			},
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
-					Labels: getLabels(m).Spec.Labels,
+					Labels: x.GetLabels(m).Spec.Labels,
 				},
 				Spec: corev1.PodSpec{
 					Containers: getContainer(m),
@@ -243,12 +244,6 @@ func (r *ReconcileQueueAutoScaler) deploymentForDeployment(m *oldmonkv1.QueueAut
 	// Set Deployment instance as the owner of the Deployment.
 	controllerutil.SetControllerReference(m, dep, r.scheme)
 	return dep
-}
-
-func getLabels(m *oldmonkv1.QueueAutoScaler) *oldmonkv1.QueueAutoScaler {
- m.Spec.Labels["operator-trigger"] = m.Spec.Deployment
- m.Spec.Labels["operator-trigger-operator"] = m.Spec.AppSpec.Name
- return m
 }
 
 func getContainer(m *oldmonkv1.QueueAutoScaler) []corev1.Container {
@@ -315,18 +310,9 @@ func getContainer(m *oldmonkv1.QueueAutoScaler) []corev1.Container {
 	if len(env) > 0 {
 		dep[0].Env = env
 	}
-
 	return dep
 }
 
-// getPodNames returns the pod names of the array of pods passed in
-func getPodNames(pods []corev1.Pod) []string {
-	var podNames []string
-	for _, pod := range pods {
-		podNames = append(podNames, pod.Name)
-	}
-	return podNames
-}
 
 func (r *ReconcileQueueAutoScaler) finalizeAutoScaler(m *oldmonkv1.QueueAutoScaler) error {
 	// Delete Deployment
@@ -351,22 +337,4 @@ func (r *ReconcileQueueAutoScaler) addFinalizer(m *oldmonkv1.QueueAutoScaler) er
 		return err
 	}
 	return nil
-}
-
-func contains(list []string, s string) bool {
-	for _, v := range list {
-		if v == s {
-			return true
-		}
-	}
-	return false
-}
-
-func remove(list []string, s string) []string {
-	for i, v := range list {
-		if v == s {
-			list = append(list[:i], list[i+1:]...)
-		}
-	}
-	return list
 }

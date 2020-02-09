@@ -1,0 +1,28 @@
+
+# docker-compose for beanstalk local test. Open browser at http://127.0.0.1
+---
+version: '3'
+
+services:
+  web:
+    image : evalsocket/beanstalkd-admin
+    ports:
+      - 80:80
+    environment:
+      - BEANSTALKD_HOST=beanstalkd
+    links:
+      - beanstalkd
+  beanstalkd:
+    image: evalsocket/beanstalkd
+    volumes:
+      - beanstalkd_data:/var/lib/beanstald
+  rabbitmq:
+    image: 'rabbitmq:3.6-management-alpine'
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    networks:
+      - network
+
+volumes:
+  beanstalkd_data:
