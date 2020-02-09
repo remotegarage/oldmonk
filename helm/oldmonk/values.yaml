@@ -1,0 +1,16 @@
+replicaCount: 1
+revisionHistoryLimit: 1
+image:
+  repository: evalsocket/oldmonk
+  servicePort: 3000
+  tag: latest
+  config: []
+  secret: []
+  pullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: 200m
+      memory: 300Mi
+roleBindingName : oldmonk
+serviceAccount : oldmonk
+roleName : oldmonk

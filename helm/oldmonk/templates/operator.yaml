@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{  .Chart.Name }}"
+  labels :
+    chart: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      name:  "{{  .Chart.Name }}"
+  template:
+    metadata:
+      labels:
+        name: "{{  .Chart.Name }}"
+        app: "{{  .Chart.Name }}"
+    spec:
+      serviceAccountName: "{{ .Values.serviceAccount }}"
+      containers:
+        - name: "{{  .Chart.Name  }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          command:
+          - oldmonk
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+          - containerPort: {{ .Values.image.servicePort}}
+          resources:
+            requests:
+              cpu: "{{ .Values.image.resources.requests.cpu }}"
+              memory: "{{ .Values.image.resources.requests.memory }}"
+          envFrom:
+            - configMapRef:
+              {{- range $key, $val := .Values.image.config }}
+                  value : {{ $val }}
+              {{- end }}
+            - secretRef:
+              {{- range $key, $val := .Values.image.secret }}
+                  value : {{ $val }}
+              {{- end }}
+          env:
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: "{{  .Chart.Name  }}"

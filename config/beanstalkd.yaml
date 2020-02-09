@@ -1,0 +1,41 @@
+apiVersion: oldmonk.evalsocket.in/v1
+kind: QueueAutoScaler
+metadata:
+  name: lifecycle
+spec:
+  type : "BEANSTALKD"
+  option :
+    uri : '127.0.0.1:11300'
+    tube: 'default'
+    key : 'current-jobs-ready'
+  secrets : cghghh
+  maxPods : 6
+  minPods : 1
+  scaleDown :
+    amount : 1
+    threshold : 3
+  scaleUp :
+    amount : 1
+    threshold : 4
+  deployment : 'demo-app'
+  autopilot : true
+  labels:
+    chart: app
+    env: dev
+    app: app
+    version: v3
+  # volume:
+  #   - name: config-volume
+  #     configMap:
+  #       name: app-file-config
+  appSpec :
+    name : 'demo-app'
+    revisionHistoryLimit: 4
+    image: "nginx:latest"
+    # envFrom:
+    #   - configMapRef:
+    #       name: common-configmap
+    #   - secretRef:
+    #       name: app-config
+    ports :
+      - containerPort : 8080

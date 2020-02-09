@@ -1,0 +1,4 @@
+apiVersion: v0
+description: Helm chart for Oldmonk
+name: oldmonk
+version: 0.0.1
