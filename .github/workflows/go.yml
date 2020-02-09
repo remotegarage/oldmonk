@@ -33,7 +33,7 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v1
-        
+
       - name: Set up Go 1.13
         uses: actions/setup-go@v1
         with:
@@ -41,7 +41,7 @@ jobs:
         id: go
 
       - name: Get dependencies
-        run: make mod fmt generate vet manifests
+        run: make mod fmt generate vet
 
       - name: Run golangci-lint
         uses: actions-contrib/golangci-lint@v1
