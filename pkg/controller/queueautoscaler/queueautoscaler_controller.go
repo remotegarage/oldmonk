@@ -176,7 +176,7 @@ func (r *ReconcileQueueAutoScaler) Reconcile(request reconcile.Request) (reconci
 		podList := &corev1.PodList{}
 		listOpts := []client.ListOption{
 			client.InNamespace(queueAutoScaler.Namespace),
-			client.MatchingLabels(queueAutoScaler.Spec.Labels),
+			client.MatchingLabels(getLabels(queueAutoScaler).Spec.Labels),
 		}
 		err = r.client.List(context.TODO(), podList, listOpts...)
 		if err != nil {
@@ -222,11 +222,11 @@ func (r *ReconcileQueueAutoScaler) deploymentForDeployment(m *oldmonkv1.QueueAut
 			Replicas: &m.Spec.MinPods,
 			Strategy: m.Spec.Strategy,
 			Selector: &metav1.LabelSelector{
-				MatchLabels: m.Spec.Labels,
+				MatchLabels: getLabels(m).Spec.Labels,
 			},
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
-					Labels: m.Spec.Labels,
+					Labels: getLabels(m).Spec.Labels,
 				},
 				Spec: corev1.PodSpec{
 					Containers: getContainer(m),
@@ -243,6 +243,12 @@ func (r *ReconcileQueueAutoScaler) deploymentForDeployment(m *oldmonkv1.QueueAut
 	// Set Deployment instance as the owner of the Deployment.
 	controllerutil.SetControllerReference(m, dep, r.scheme)
 	return dep
+}
+
+func getLabels(m *oldmonkv1.QueueAutoScaler) *oldmonkv1.QueueAutoScaler {
+ m.Spec.Labels["operator-trigger"] = m.Spec.Deployment
+ m.Spec.Labels["operator-trigger-operator"] = m.Spec.AppSpec.Name
+ return m
 }
 
 func getContainer(m *oldmonkv1.QueueAutoScaler) []corev1.Container {

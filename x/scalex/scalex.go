@@ -160,12 +160,31 @@ func (s Scaler) do(ctx context.Context) {
 				return err
 			}
 			logger.WithFields(log.Fields{"delta": delta, "desired": *deployment.Spec.Replicas, "available": deployment.Status.AvailableReplicas}).Info("Updated deployment")
+			return nil
+		}
+		strategy := backoff.NewExponentialBackOff()
+		strategy.MaxInterval = time.Second
+		strategy.MaxElapsedTime = time.Second * 5
+		strategy.InitialInterval = time.Millisecond * 100
+
+		err := backoff.Retry(op, strategy)
+		if err != nil {
+
+			msg := fmt.Sprintf("error scaling: %s", err)
+			logger.Error(msg)
+
+		}
+	}
+
+	for _, scaler := range instance.Items {
+		logger := log.WithFields(log.Fields{"delta": "bnvh"})
+		op := func() error {
 			// Update the QueueAutoScaler status with the pod names
 			// List the pods for this worker's deployment
 			podList := &corev1.PodList{}
 			listOpts := []client.ListOption{
 				client.InNamespace(scaler.Namespace),
-				client.MatchingLabels(scaler.Spec.Labels),
+				client.MatchingLabels(getLabels(&scaler).Spec.Labels),
 			}
 			err = s.client.List(context.TODO(), podList, listOpts...)
 			if err != nil {
@@ -197,6 +216,7 @@ func (s Scaler) do(ctx context.Context) {
 			logger.Error(msg)
 
 		}
+
 	}
 }
 
@@ -207,4 +227,10 @@ func getPodNames(pods []corev1.Pod) []string {
 		podNames = append(podNames, pod.Name)
 	}
 	return podNames
+}
+
+func getLabels(m *oldmonkv1.QueueAutoScaler) *oldmonkv1.QueueAutoScaler {
+ m.Spec.Labels["operator-trigger"] = m.Spec.Deployment
+ m.Spec.Labels["operator-trigger-operator"] = m.Spec.AppSpec.Name
+ return m
 }
