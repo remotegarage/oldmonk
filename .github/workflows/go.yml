@@ -33,6 +33,12 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v1
+        
+      - name: Set up Go 1.13
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.13
+        id: go
 
       - name: Get dependencies
         run: make mod fmt generate vet manifests
