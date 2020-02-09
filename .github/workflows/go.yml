@@ -43,9 +43,6 @@ jobs:
       - name: Get dependencies
         run: make mod fmt generate vet
 
-      - name: Run golangci-lint
-        uses: actions-contrib/golangci-lint@v1
-
       - name: Run helm chart-testing (lint)
         id: lint
         uses: helm/chart-testing-action@v1.0.0-alpha.3
