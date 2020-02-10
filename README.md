@@ -84,6 +84,19 @@ spec:
 | Strategy| appsv1.DeploymentStrategy    |     N    |    strategy for deployment    |
 | AppSpec| corev1.Container    |     N    |     your container defination    |
 
+
+Option configuration
+
+| Key   | Type     | Required | Description |
+| ---   | -------- | -------- | --------
+| Uri  | string   |     Y    |    Queue url     |
+| Region  | string   |     N    |    aws region for sqs    |
+| Type  | string   |     Y    |    rabbitmq exchange type  |
+| Queue  | string   |     Y    |    rabbitmq queue name  |
+| Exchange  | string   |     Y    |    rabbitmq exchange name  |
+| Tube  | string   |     Y    |    beanstalkd tube name  |
+| Key  | string   |     Y    |    beanstalkd tube states key  |
+
 ### Support
  - [x] Rabbitmq
  - [x] SQS

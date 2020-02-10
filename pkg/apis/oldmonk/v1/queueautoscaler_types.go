@@ -37,6 +37,7 @@ type ListOptions struct {
 	Tube     string `json:"tube,omitempty"`
 	Group    string `json:"group,omitempty"`
 	Topic    string `json:"topic,omitempty"`
+	Topic    string `json:"topic,omitempty"`
 }
 
 // ScaleSpec defines the desired state of Autoscaler
