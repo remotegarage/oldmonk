@@ -31,3 +31,12 @@ changelog:
     exclude:
     - '^docs:'
     - '^test:'
+brews:
+- name: oldmonk
+  github:
+    owner: evalsocket
+    name: homebrew-tap
+  folder: Formula
+  homepage: "https://github.com/athul/pwcli"
+  description: "A QueueAutoScaler Operator for Kubernetes"
+  install: bin.install "oldmonk"
