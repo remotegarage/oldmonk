@@ -24,7 +24,7 @@ jobs:
         version: latest
         args: release
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN_OLDMONK }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
   lint-test:
