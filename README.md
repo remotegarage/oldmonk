@@ -106,10 +106,10 @@ Install [Operator sdk](https://github.com/operator-framework/operator-sdk/blob/m
  # Terminal  3
  watch kubectl get QueueAutoScaler
  # Terminal  4
- kubectl apply -f demo/demo.yaml #custom resource for demo we are only deploying nginx image but in real case it's your worker image
+ kubectl apply -f example/demo/demo.yaml #custom resource for demo we are only deploying nginx image but in real case it's your worker image
  # Open http://127.0.0.1 and add job in default tube. cross the thresold of 4 and check terminal 1 log and also get deployment watch
  # After verifing the autoscale delete all jobs from default tube and again watch terminal1 and deployment
- kubectl delete -f demo/demo.yaml
+ kubectl delete -f example/demo/demo.yaml
  # It will also delete the deployment with crd defination
 
  ```
@@ -120,7 +120,7 @@ Install [Operator sdk](https://github.com/operator-framework/operator-sdk/blob/m
 
 ## Examples / Demos
 
-We've created several examples for you to test out Oldmonk. See [EXAMPLES](config/) for details.
+We've created several examples for you to test out Oldmonk. See [EXAMPLES](example/) for details.
 
 ## Monitoring
 
