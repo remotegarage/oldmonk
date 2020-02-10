@@ -7,8 +7,8 @@ import (
 
 	oldmonkv1 "github.com/evalsocket/oldmonk/pkg/apis/oldmonk/v1"
 
-	"github.com/evalsocket/oldmonk/x/scalex"
 	"github.com/evalsocket/oldmonk/x"
+	"github.com/evalsocket/oldmonk/x/scalex"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	appsv1 "k8s.io/api/apps/v1"
@@ -312,7 +312,6 @@ func getContainer(m *oldmonkv1.QueueAutoScaler) []corev1.Container {
 	}
 	return dep
 }
-
 
 func (r *ReconcileQueueAutoScaler) finalizeAutoScaler(m *oldmonkv1.QueueAutoScaler) error {
 	// Delete Deployment

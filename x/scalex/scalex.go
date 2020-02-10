@@ -8,6 +8,7 @@ import (
 	"time"
 
 	oldmonkv1 "github.com/evalsocket/oldmonk/pkg/apis/oldmonk/v1"
+	"github.com/evalsocket/oldmonk/x"
 	"github.com/evalsocket/oldmonk/x/queuex"
 	log "github.com/sirupsen/logrus"
 	"github.com/vmg/backoff"
@@ -184,14 +185,14 @@ func (s Scaler) do(ctx context.Context) {
 			podList := &corev1.PodList{}
 			listOpts := []client.ListOption{
 				client.InNamespace(scaler.Namespace),
-				client.MatchingLabels(getLabels(&scaler).Spec.Labels),
+				client.MatchingLabels(x.GetLabels(&scaler).Spec.Labels),
 			}
 			err = s.client.List(context.TODO(), podList, listOpts...)
 			if err != nil {
 				logger.Error(err, "Failed to list pods.", "QueueAutoScaler.Namespace", scaler.Namespace, "QueueAutoScaler.Name", scaler.Name)
 				return nil
 			}
-			podNames := getPodNames(podList.Items)
+			podNames := x.GetPodNames(podList.Items)
 
 			// Update status.Nodes if needed
 			if !reflect.DeepEqual(podNames, scaler.Status.Nodes) {
@@ -218,19 +219,4 @@ func (s Scaler) do(ctx context.Context) {
 		}
 
 	}
-}
-
-// getPodNames returns the pod names of the array of pods passed in
-func getPodNames(pods []corev1.Pod) []string {
-	var podNames []string
-	for _, pod := range pods {
-		podNames = append(podNames, pod.Name)
-	}
-	return podNames
-}
-
-func getLabels(m *oldmonkv1.QueueAutoScaler) *oldmonkv1.QueueAutoScaler {
- m.Spec.Labels["operator-trigger"] = m.Spec.Deployment
- m.Spec.Labels["operator-trigger-operator"] = m.Spec.AppSpec.Name
- return m
 }

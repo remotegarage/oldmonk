@@ -1,9 +1,8 @@
-
-package x;
+package x
 
 import (
-  oldmonkv1 "github.com/evalsocket/oldmonk/pkg/apis/oldmonk/v1"
-  corev1 "k8s.io/api/core/v1"
+	oldmonkv1 "github.com/evalsocket/oldmonk/pkg/apis/oldmonk/v1"
+	corev1 "k8s.io/api/core/v1"
 )
 
 // GetPodNames returns the pod names of the array of pods passed in
@@ -16,9 +15,9 @@ func GetPodNames(pods []corev1.Pod) []string {
 }
 
 func GetLabels(m *oldmonkv1.QueueAutoScaler) *oldmonkv1.QueueAutoScaler {
- m.Spec.Labels["operator-trigger"] = m.Spec.Deployment
- m.Spec.Labels["operator-trigger-operator"] = m.Spec.AppSpec.Name
- return m
+	m.Spec.Labels["operator-trigger"] = m.Spec.Deployment
+	m.Spec.Labels["operator-trigger-operator"] = m.Spec.AppSpec.Name
+	return m
 }
 
 func Contains(list []string, s string) bool {
