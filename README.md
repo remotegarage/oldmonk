@@ -103,13 +103,13 @@ Option configuration
 
  ## Prerequisites
 
- - [git][git_tool]
- - [go][go_tool] version v1.13+.
- - [mercurial][mercurial_tool] version 3.9+
- - [docker][docker_tool] version 17.03+.
- - [kubectl][kubectl_tool] version v1.12.0+.
- - Access to a Kubernetes v1.12.0+ cluster.
- - [Operator-SDK](Operator SDK)
+- [git][git_tool]
+- [go][go_tool] version v1.13+.
+- [mercurial][mercurial_tool] version 3.9+
+- [docker][docker_tool] version 17.03+.
+- [kubectl][kubectl_tool] version v1.12.0+.
+- Access to a Kubernetes v1.12.0+ cluster.
+- [Operator-SDK](Operator SDK)
 
 ## Get started in 5 Min
 Install [Operator sdk](https://github.com/operator-framework/operator-sdk/blob/master/doc/user/install-operator-sdk.md), create a [GKE cluster](https://cloud.google.com/kubernetes-engine/docs/how-to/creating-a-cluster) and connect cluster

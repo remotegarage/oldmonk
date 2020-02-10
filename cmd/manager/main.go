@@ -15,5 +15,5 @@ package main
 import "github.com/evalsocket/oldmonk/cmd/manager/cli"
 
 func main() {
-	cmd.Execute()
+	cli.Execute()
 }
