@@ -17,12 +17,10 @@ NOTE :  Not production ready.
 According to Wikipedia:
 
 >Old Monk : Old Monk Rum is an iconic vatted Indian dark rum, launched in 1954. It is blended and aged for a minimum of 7 years. It is a dark rum with a distinct vanilla flavour, with an alcohol content of 42.8%.
->In 1855, an entrepreneurial Scotsman named Edward Abraham Dyer, father of Colonel Reginald Edward Harry Dyer of Jallianwala Bagh massacre, set up a brewery in Kasauli, Himachal Pradesh to cater to the British requirement for cheap beer. This brewery changed hands and became a distillery by the name of Mohan Meakin Pvt. Ltd
+>In 1855, an entrepreneurial Scotsman named Edward Abraham Dyer, father of Colonel Reginald Edward Harry Dyer of Jallianwala Bagh massacre, set up a brewery in **Kasauli, Himachal Pradesh** to cater to the British requirement for cheap beer. This brewery changed hands and became a distillery by the name of Mohan Meakin Pvt. Ltd
 >Mohan named the rum in honour of the Benedictine religious order of Christianity, with which he was fascinated.
->Some believe that Ved Rattan Mohan met "Gumnami baba" few times during this period and he named his creation after Gumnami baba, who was an old monk and believed to be as Netaji Subhas Chandra Bose by a group of Netaji enthusiasts and researchers, though there is no particular proof behind this. This doctrine also supports the fact that Netaji Subhas Chandra Bose never died out of the plane crash and came back to India as a monk and lived a spiritual life in disguise.
+>Some believe that Ved Rattan Mohan met "**Gumnami baba**" few times during this period and he named his creation after Gumnami baba, who was an old monk and believed to be as **Netaji Subhas Chandra Bose** by a group of Netaji enthusiasts and researchers, though there is no particular proof behind this. This doctrine also supports the fact that **Netaji Subhas Chandra Bose** never died out of the plane crash and came back to India as a monk and lived a spiritual life in disguise.
 >
-
-
 ## What is Oldmonk
 
 Oldmonk is all about turning day 2 operations into code! Not just that, it means you start thinking about day 2 on day 1. This is a dream come true for any Operations team!
