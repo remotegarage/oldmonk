@@ -99,6 +99,7 @@ Option configuration
  - [x] Rabbitmq
  - [x] SQS
  - [x] Beanstalk
+ - [x] Nats.io
  - [ ] Kafka
 
  ## Prerequisites
@@ -215,3 +216,7 @@ Or alternatively if you configured `helm` on your cluster, you can deploy Oldmon
 
 **Got a question?**
 File a GitHub [issue](https://github.com/evalsocket/oldmonk/issues), or send us an [email](mailto:evalsocket@protonmail.com).
+
+## Ref 
+
+  - @Uswitch  [sqs-autoscaler-controller](https://github.com/uswitch/sqs-autoscaler-controller)
