@@ -30,7 +30,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: POOL_DURATION
+            - name: INTERVAL
               value: 120
             - name: OPERATOR_NAME
               value: "oldmonk"

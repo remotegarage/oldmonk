@@ -72,8 +72,8 @@ func add(mgr manager.Manager, r reconcile.Reconciler) error {
 		return err
 	}
 	poolDuration := time.Second*120
-  if len(os.Getenv("POOL_DURATION")) != 0 {
-		i, err := strconv.ParseInt(os.Getenv("POOL_DURATION"),10, 64);
+  if len(os.Getenv("INTERVAL")) != 0 {
+		i, err := strconv.ParseInt(os.Getenv("INTERVAL"),10, 64);
 		if  err != nil {
 			 log.Error(err,"Error in converting pool duration string to time")
 		}
