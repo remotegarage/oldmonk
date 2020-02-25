@@ -4,6 +4,9 @@ import (
 	"context"
 	"reflect"
 	"time"
+	"os"
+	"fmt"
+	"strconv"
 
 	oldmonkv1 "github.com/evalsocket/oldmonk/pkg/apis/oldmonk/v1"
 
@@ -69,10 +72,17 @@ func add(mgr manager.Manager, r reconcile.Reconciler) error {
 	if err != nil {
 		return err
 	}
-
+	poolDuration := time.Second*120
+  if len(os.Getenv("POOL_DURATION")) != 0 {
+		i, err := strconv.ParseInt(os.Getenv("POOL_DURATION"),10, 64);
+		if  err != nil {
+			 log.Error("Error in converting pool duration string to time")
+		}
+		poolDuration = time.Second*time.Duration(i)
+	}
 	checkState := func() {
 		time.Sleep(2 * time.Second)
-		scaler := scalex.NewScalex(mgr, time.Second*60)
+		scaler := scalex.NewScalex(mgr, poolDuration)
 		scaler.Run(context.TODO())
 	}
 	go checkState()
