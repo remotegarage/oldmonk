@@ -30,5 +30,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            - name: INTERVAL
+              value: 120
             - name: OPERATOR_NAME
               value: "oldmonk"
