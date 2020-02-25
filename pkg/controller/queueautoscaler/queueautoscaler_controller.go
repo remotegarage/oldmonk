@@ -5,7 +5,6 @@ import (
 	"reflect"
 	"time"
 	"os"
-	"fmt"
 	"strconv"
 
 	oldmonkv1 "github.com/evalsocket/oldmonk/pkg/apis/oldmonk/v1"
