@@ -3,7 +3,6 @@ kind: QueueAutoScaler
 metadata:
   name: sqsautoscalertest
 spec:
-  deployment : 'workertest'
   type : "SQS"
   option :
     uri : 'https://sqs.us-east-2.amazonaws.com/131220237071/tets'
