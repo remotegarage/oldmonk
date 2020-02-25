@@ -75,7 +75,7 @@ func add(mgr manager.Manager, r reconcile.Reconciler) error {
   if len(os.Getenv("POOL_DURATION")) != 0 {
 		i, err := strconv.ParseInt(os.Getenv("POOL_DURATION"),10, 64);
 		if  err != nil {
-			 log.Error("Error in converting pool duration string to time")
+			 log.Error(err,"Error in converting pool duration string to time")
 		}
 		poolDuration = time.Second*time.Duration(i)
 	}
