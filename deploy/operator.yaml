@@ -31,8 +31,6 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: POOL_DURATION
-              valueFrom:
-                fieldRef:
-                  fieldPath: 120
+              value: 120
             - name: OPERATOR_NAME
               value: "oldmonk"
