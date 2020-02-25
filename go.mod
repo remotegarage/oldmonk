@@ -7,14 +7,11 @@ require (
 	github.com/beanstalkd/go-beanstalk v0.0.0-20190515041346-390b03b3064a
 	github.com/operator-framework/operator-sdk v0.14.0
 	github.com/sirupsen/logrus v1.4.2
-	github.com/spf13/cobra v0.0.5
 	github.com/spf13/pflag v1.0.5
-	github.com/spf13/viper v1.4.0
 	github.com/streadway/amqp v0.0.0-20200108173154-1c71cc93ed71
 	github.com/vmg/backoff v1.0.0
 	k8s.io/api v0.0.0
 	k8s.io/apimachinery v0.0.0
-	k8s.io/cli-runtime v0.0.0
 	k8s.io/client-go v12.0.0+incompatible
 	sigs.k8s.io/controller-runtime v0.4.0
 )

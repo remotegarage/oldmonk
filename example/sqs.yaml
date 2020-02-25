@@ -6,17 +6,18 @@ spec:
   deployment : 'workertest'
   type : "SQS"
   option :
-    uri : 'sdjhfsdvhjfvsdvfhdsf'
-    region : 'asia-south-1'
+    uri : 'https://sqs.us-east-2.amazonaws.com/131220237071/tets'
+    region : 'us-east-2'
   maxPods : 7
   minPods : 1
   scaleDown :
     amount : 4
-    threshold : 34
+    threshold : 8
   scaleUp :
     amount : 4
-    threshold : 34
+    threshold : 10
   deployment : 'demo-app2'
+  autopilot : true
   secrets : 'demo'
   labels:
     chart: demo-app
@@ -34,19 +35,19 @@ spec:
         name: app-file-config
   appSpec :
     name : 'demo-app2'
-    readinessProbe:
-      httpGet:
-        path: /healthz
-        port: 8080
-      initialDelaySeconds: 3
-      periodSeconds: 5
-    livenessProbe:
-      httpGet:
-        path: /healthz
-        port: 8080
-      initialDelaySeconds: 3
-      periodSeconds: 5
-    revisionHistoryLimit: 4
+    # readinessProbe:
+    #   httpGet:
+    #     path: /healthz
+    #     port: 8080
+    #   initialDelaySeconds: 3
+    #   periodSeconds: 5
+    # livenessProbe:
+    #   httpGet:
+    #     path: /healthz
+    #     port: 8080
+    #   initialDelaySeconds: 3
+    #   periodSeconds: 5
+    # revisionHistoryLimit: 4
     image: "nginx:latest"
     resources:
       requests:
@@ -55,9 +56,9 @@ spec:
       limits:
         memory: 512Mi
         cpu: '1'
-    volumeMounts:
-      - name: config-volume
-        mountPath: /app/config.json
+    # volumeMounts:
+    #   - name: config-volume
+    #     mountPath: /app/config.json
     # envFrom:
     #   - configMapRef:
     #     name: common-configmap
