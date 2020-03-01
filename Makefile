@@ -41,6 +41,8 @@ install:
 manifests:
 	operator-sdk generate k8s
 	operator-sdk generate crds
+	go run github.com/ahmetb/gen-crd-api-reference-docs -api-dir ./pkg/apis -config docs/api/config.json -template-dir docs/api/template -out-file docs/api/index.html
+
 
 # Run go fmt against code
 fmt:
