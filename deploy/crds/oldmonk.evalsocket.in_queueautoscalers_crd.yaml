@@ -2351,6 +2351,18 @@ spec:
           type: object
         status:
           description: QueueAutoScalerStatus defines the observed state of QueueAutoScaler
+          properties:
+            nodes:
+              description: 'INSERT ADDITIONAL STATUS FIELD - define observed state
+                of cluster Important: Run "operator-sdk generate k8s" to regenerate
+                code after modifying this file Add custom validation using kubebuilder
+                tags: https://book-v1.book.kubebuilder.io/beyond_basics/generating_crd.html
+                Nodes are the names of the memcached pods'
+              items:
+                type: string
+              type: array
+          required:
+          - nodes
           type: object
       type: object
   version: v1

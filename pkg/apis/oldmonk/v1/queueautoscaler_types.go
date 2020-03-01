@@ -53,6 +53,7 @@ type QueueAutoScalerStatus struct {
 	// Add custom validation using kubebuilder tags: https://book-v1.book.kubebuilder.io/beyond_basics/generating_crd.html
 	// Nodes are the names of the memcached pods
 	// +listType=set
+	Nodes []string `json:"nodes"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
