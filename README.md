@@ -34,6 +34,10 @@ Oldmonk can handle straight-up (static) yaml files with the complete definition 
 
 These templates will be merged and processed with a set of environment-specific parameters to get a list of resource manifests. Then these manifest can be created/updated/deleted in Kubernetes.
 
+## Docs
+
+ - [Oldmonk CRD API Reference](https://5e5c0c9e281b8f4a7d28c58d--adoring-yonath-d459b8.netlify.com/)
+
 ## Example
 
 
@@ -62,38 +66,6 @@ spec:
   deployment : 'demo-app'
   autopilot : false
 ```
-
-
-
-| Key   | Type     | Required | Description |
-| ---   | -------- | -------- | --------
-| type  | string   |     Y    |     type of queue(BEANSTALK/RABBITMQ/SQS)    |
-| option| Object   |     Y    |     Connection Detaile like `uri`    |
-| secrets| string   |     Y    |     secrets for queue connection    |
-| maxPods| int32   |     Y    |     max pod cr can scale up    |
-| minPods| int32   |     Y    |     min pod cr can scale down    |
-| scaleDown| Object   |     Y    |     Scale down details like `thresold` and `amount`    |
-| scaleUp| Object   |     Y    |     Scale Up details like `thresold` and `amount`       |
-| deployment| string   |     Y    |     name of deployment    |
-| autopilot| bool   |     Y    |     if false then it only scale your deployment according to policy else it will manage the life cycle of deployment(need some extra parameter)   |
-| deployment| string   |     Y    |     name of deployment    |
-| labels| Object   |     N    |     labels for deployment `KEY: VALUE`    |
-| volume| []corev1.Volume   |     N    |     volumes for deployment    |
-| Strategy| appsv1.DeploymentStrategy    |     N    |    strategy for deployment    |
-| AppSpec| corev1.Container    |     N    |     your container defination    |
-
-
-Option configuration
-
-| Key   | Type     | Required | Description |
-| ---   | -------- | -------- | --------
-| Uri  | string   |     Y    |    Queue url     |
-| Region  | string   |     N    |    aws region for sqs    |
-| Type  | string   |     Y    |    rabbitmq exchange type  |
-| Queue  | string   |     Y    |    rabbitmq queue name  |
-| Exchange  | string   |     Y    |    rabbitmq exchange name  |
-| Tube  | string   |     Y    |    beanstalkd tube name  |
-| Key  | string   |     Y    |    beanstalkd tube states key  |
 
 ### Support
  - [x] Rabbitmq
