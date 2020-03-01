@@ -13,6 +13,7 @@ spec:
       labels:
         name: oldmonk
     spec:
+      priorityClassName: oldmonk-operator-control-plane
       serviceAccountName: oldmonk
       containers:
         - name: oldmonk
@@ -34,3 +35,9 @@ spec:
               value: 120
             - name: OPERATOR_NAME
               value: "oldmonk"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              memory: 128Mi

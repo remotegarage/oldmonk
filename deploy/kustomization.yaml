@@ -1,0 +1,7 @@
+resources:
+- operator.yaml
+- role_binding.yaml
+- role.yaml
+- service_account.yaml
+- priority.yaml
+- crds/oldmonk.evalsocket.in_queueautoscalers_crd.yaml
