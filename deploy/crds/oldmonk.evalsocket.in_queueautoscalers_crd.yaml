@@ -1080,8 +1080,6 @@ spec:
                   type: string
                 vshost:
                   type: string
-              required:
-              - uri
               type: object
             scaleDown:
               description: ScaleSpec defines the desired state of Autoscaler

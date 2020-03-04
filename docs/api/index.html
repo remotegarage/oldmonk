@@ -510,6 +510,30 @@ bool
 <p>
 <p>QueueAutoScalerStatus defines the observed state of QueueAutoScaler</p>
 </p>
+<table class="table table-striped">
+<thead class="thead-dark">
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>nodes</code></br>
+<em>
+[]string
+</em>
+</td>
+<td>
+<p>INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
+Important: Run &ldquo;operator-sdk generate k8s&rdquo; to regenerate code after modifying this file
+Add custom validation using kubebuilder tags: <a href="https://book-v1.book.kubebuilder.io/beyond_basics/generating_crd.html">https://book-v1.book.kubebuilder.io/beyond_basics/generating_crd.html</a>
+Nodes are the names of the memcached pods</p>
+</td>
+</tr>
+</tbody>
+</table>
 <h3 id="oldmonk.evalsocket.in/v1.ScaleSpec">ScaleSpec
 </h3>
 <p>
