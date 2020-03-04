@@ -3,6 +3,7 @@ package scalex
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"reflect"
 	"time"
@@ -16,6 +17,7 @@ import (
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+
 	// "k8s.io/apimachinery/pkg/runtime"
 
 	"sigs.k8s.io/controller-runtime/pkg/manager"
@@ -88,14 +90,16 @@ func (s Scaler) targetReplicas(size int32, scale *oldmonkv1.QueueAutoScaler, d *
 func (s Scaler) ExecuteScale(ctx context.Context, scale *oldmonkv1.QueueAutoScaler) (*appsv1.Deployment, int32, error) {
 
 	// // Get Secrets
-	// secrets := &corev1.Secret{}
-	// err := s.client.Get(context.TODO(), client.ObjectKey{
-	// 	Namespace: scale.ObjectMeta.Namespace,
-	// 	Name:      scale.Spec.Secrets,
-	// }, secrets)
-	// if err != nil {
-	// 	return nil, 0, err
-	// }
+	secret := &corev1.Secret{}
+	err := s.client.Get(context.TODO(), client.ObjectKey{
+		Namespace: scale.ObjectMeta.Namespace,
+		Name:      scale.Spec.Secrets,
+	}, secret)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	scale.Spec.Option.Uri = string(secret.Data["URI"])
 
 	// To-Do Set secret to env variable and remove it from crd defination
 
@@ -106,13 +110,13 @@ func (s Scaler) ExecuteScale(ctx context.Context, scale *oldmonkv1.QueueAutoScal
 	size := c.GetCount()
 	_ = c.Close()
 	fmt.Println("Queue :", scale.Spec.Type, "And Count : ", size)
-	// if size < 0 {
-	// 	return nil, 0, errors.Unwrap(fmt.Errorf("......"))
-	// }
+	if size <= 0 {
+		return nil, 0, errors.Unwrap(fmt.Errorf("......"))
+	}
 
 	// Fetch the QueueAutoScaler instance
 	deployment := &appsv1.Deployment{}
-	err := s.client.Get(context.TODO(), client.ObjectKey{
+	err = s.client.Get(context.TODO(), client.ObjectKey{
 		Namespace: scale.ObjectMeta.Namespace,
 		Name:      scale.Spec.Deployment,
 	}, deployment)
@@ -153,7 +157,7 @@ func (s Scaler) do(ctx context.Context) {
 		fmt.Println("Error", err)
 	}
 	for _, scaler := range instance.Items {
-		logger := log.WithFields(log.Fields{"delta": "bnvh"})
+		logger := log.WithFields(log.Fields{"delta": ""})
 		op := func() error {
 			deployment, delta, err := s.ExecuteScale(ctx, &scaler)
 			if err != nil {

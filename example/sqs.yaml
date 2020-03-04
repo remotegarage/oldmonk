@@ -1,20 +1,30 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: queue-config
+type: Opaque
+data:
+  URI: "aHR0cHM6Ly9zcXMuYXAtc291dGgtMS5hbWF6b25hd3MuY29tLzEzMTIyMDIzNzA3MS90ZXN0Cg=="
+
+---
+
 apiVersion: oldmonk.evalsocket.in/v1
 kind: QueueAutoScaler
 metadata:
-  name: worker-callback
+  name: lifecycle
 spec:
   type : "SQS"
   option :
-    uri : 'https://sqs.us-east-2.amazonaws.com/131220237071/tets'
-    region : 'us-east-2'
-  maxPods : 20
+    region: 'ap-south-1'
+  secrets : queue-config
+  maxPods : 4
   minPods : 1
   scaleDown :
     amount : 1
-    threshold : 10
+    threshold : 3
   scaleUp :
     amount : 1
-    threshold : 11
-  deployment : nginx-1
+    threshold : 4
+  deployment : 'demo-app'
   autopilot : false
-  secrets : ''
+

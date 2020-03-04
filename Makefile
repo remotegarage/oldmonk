@@ -30,11 +30,11 @@ run: mod  manifests generate fmt vet
 
 # Install CRDs into a cluster
 install:
-	kubectl apply -f deploy/crds
+	kubectl apply -f deploy/crds --validate=false
 	kubectl apply -f deploy/service_account.yaml
 	kubectl apply -f deploy/role.yaml
 	kubectl apply -f deploy/role_binding.yaml
-	kubectl apply -f deploy/operator.yaml
+	# kubectl apply -f deploy/operator.yaml
 
 
 # Generate manifests e.g. CRD, RBAC etc.
