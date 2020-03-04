@@ -51,7 +51,6 @@ metadata:
 spec:
   type : "BEANSTALKD"
   option :
-    uri : '127.0.0.1:11300'
     tube: 'default'
     key : 'current-jobs-ready'
   secrets : 'rabbitmq'
@@ -71,7 +70,7 @@ spec:
  - [x] Rabbitmq
  - [x] SQS
  - [x] Beanstalk
- - [x] Nats.io
+ - [ ] Nats.io
  - [ ] Kafka
 
  ## Prerequisites
