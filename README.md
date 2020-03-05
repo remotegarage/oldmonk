@@ -70,7 +70,7 @@ spec:
  - [x] Rabbitmq
  - [x] SQS
  - [x] Beanstalk
- - [ ] Nats.io
+ - [x] Nats.io (Not Tested on scale)
  - [ ] Kafka
 
  ## Prerequisites
@@ -168,20 +168,10 @@ kubectl apply -f config/beanstalk.yaml
 
 ```
 
-```
-kubectl krew install oldmonk
-kubectl oldmonk get
-
-```
 
 ### Vanilla Manifests
 
 You have to first clone or download the repository contents. The kubernetes deployment and files are provided inside `deploy/crd/` folder.
-
-
-### Helm Charts
-
-Or alternatively if you configured `helm` on your cluster, you can deploy Oldmonk via helm chart located under `helm/chart/oldmonk` folder.
 
 ## Help
 
@@ -190,4 +180,4 @@ File a GitHub [issue](https://github.com/evalsocket/oldmonk/issues), or send us 
 
 ## Ref 
 
-  - @Uswitch  [sqs-autoscaler-controller](https://github.com/uswitch/sqs-autoscaler-controller)
+  - [Uswitch/sqs-autoscaler-controller](https://github.com/uswitch/sqs-autoscaler-controller)
