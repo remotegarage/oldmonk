@@ -13,7 +13,6 @@ spec:
       labels:
         name: oldmonk
     spec:
-      priorityClassName: oldmonk-operator-control-plane
       serviceAccountName: oldmonk
       containers:
         - name: oldmonk
@@ -32,7 +31,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: INTERVAL
-              value: 120
+              value: "120"
             - name: OPERATOR_NAME
               value: "oldmonk"
           resources:
