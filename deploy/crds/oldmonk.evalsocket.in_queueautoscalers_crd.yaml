@@ -32,8 +32,8 @@ spec:
           description: AutoScalerSpec defines the desired state of QueueAutoScaler
           properties:
             appSpec:
-              description: A single application container that you want to run within
-                a pod.
+              description: AppSpec contains deployment specification used same as
+                deployment file (optional)
               properties:
                 args:
                   description: 'Arguments to the entrypoint. The docker image''s CMD
@@ -1044,50 +1044,68 @@ spec:
               - name
               type: object
             autopilot:
+              description: Autopilot is a bool value. false means it only auto scale
+                deployment and true means it will manage the entire life cycle of
+                deployment
               type: boolean
             deployment:
+              description: Deployment contains deployment name which user want to
+                scale
               type: string
             labels:
               additionalProperties:
                 type: string
+              description: Labels contains key value pair for deployment (optional)
               type: object
             maxPods:
+              description: MaxPods for deployment
               format: int32
               type: integer
             minPods:
+              description: MinPods for deployment
               format: int32
               type: integer
             option:
-              description: ListOptions defines the desired state of Queue
+              description: Option contains Queue Details
               properties:
                 exchange:
+                  description: Exchange is a optional parameter and used in case of
+                    Rabbitmq
                   type: string
                 group:
-                  type: string
-                key:
+                  description: Group is a optional parameter and used in case of Kafka
                   type: string
                 queue:
+                  description: Queue is a optional parameter and used in case of Rabbitmq
+                    and nats
                   type: string
                 region:
+                  description: Region is a optional parameter and used in case of
+                    SQS
                   type: string
                 topic:
+                  description: Topic is a optional parameter and used in case of Kafka
                   type: string
                 tube:
+                  description: Tube is a optional parameter and used in case of Beanstalk
                   type: string
                 type:
+                  description: Type is a optional parameter and used in case of Rabbitmq(exchange
+                    type)
                   type: string
                 uri:
-                  type: string
-                vshost:
+                  description: Uri (Don't use it's depricated). Use secrets
                   type: string
               type: object
             scaleDown:
-              description: ScaleSpec defines the desired state of Autoscaler
+              description: ScaleDown contains scale down policy
               properties:
                 amount:
+                  description: Amount is the number by which you want to scale
                   format: int32
                   type: integer
                 threshold:
+                  description: Threshold is the amount of messages in queue
                   format: int32
                   type: integer
               required:
@@ -1095,12 +1113,14 @@ spec:
               - threshold
               type: object
             scaleUp:
-              description: ScaleSpec defines the desired state of Autoscaler
+              description: ScaleUp contains scale up policy
               properties:
                 amount:
+                  description: Amount is the number by which you want to scale
                   format: int32
                   type: integer
                 threshold:
+                  description: Threshold is the amount of messages in queue
                   format: int32
                   type: integer
               required:
@@ -1108,10 +1128,11 @@ spec:
               - threshold
               type: object
             secrets:
+              description: Secrets contains secret name. Pass secure connection uri
+                using secrets
               type: string
             strategy:
-              description: DeploymentStrategy describes how to replace existing pods
-                with new ones.
+              description: Strategy contains deployment strategy (optional)
               properties:
                 rollingUpdate:
                   description: 'Rolling update config params. Present only if DeploymentStrategyType
@@ -1158,8 +1179,11 @@ spec:
                   type: string
               type: object
             type:
+              description: Type contains the user-specified Queue type Type can be
+                RABITMQ/BEANSTALK/NATS/SQS
               type: string
             volume:
+              description: Volume cotains a list of volume (optional)
               items:
                 description: Volume represents a named volume in a pod that may be
                   accessed by any container in the pod.
@@ -2351,11 +2375,7 @@ spec:
           description: QueueAutoScalerStatus defines the observed state of QueueAutoScaler
           properties:
             nodes:
-              description: 'INSERT ADDITIONAL STATUS FIELD - define observed state
-                of cluster Important: Run "operator-sdk generate k8s" to regenerate
-                code after modifying this file Add custom validation using kubebuilder
-                tags: https://book-v1.book.kubebuilder.io/beyond_basics/generating_crd.html
-                Nodes are the names of the memcached pods'
+              description: Nodes are the names of the pods
               items:
                 type: string
               type: array

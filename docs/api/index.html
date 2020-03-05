@@ -47,6 +47,7 @@ string
 </em>
 </td>
 <td>
+<p>Uri (Don&rsquo;t use it&rsquo;s depricated). Use secrets</p>
 </td>
 </tr>
 <tr>
@@ -57,6 +58,7 @@ string
 </em>
 </td>
 <td>
+<p>Region is a optional parameter and used in case of SQS</p>
 </td>
 </tr>
 <tr>
@@ -67,6 +69,7 @@ string
 </em>
 </td>
 <td>
+<p>Type is a optional parameter and used in case of Rabbitmq(exchange type)</p>
 </td>
 </tr>
 <tr>
@@ -77,26 +80,7 @@ string
 </em>
 </td>
 <td>
-</td>
-</tr>
-<tr>
-<td>
-<code>vshost</code></br>
-<em>
-string
-</em>
-</td>
-<td>
-</td>
-</tr>
-<tr>
-<td>
-<code>key</code></br>
-<em>
-string
-</em>
-</td>
-<td>
+<p>Queue is a optional parameter and used in case of Rabbitmq and nats</p>
 </td>
 </tr>
 <tr>
@@ -107,6 +91,7 @@ string
 </em>
 </td>
 <td>
+<p>Exchange is a optional parameter and used in case of Rabbitmq</p>
 </td>
 </tr>
 <tr>
@@ -117,6 +102,7 @@ string
 </em>
 </td>
 <td>
+<p>Tube is a optional parameter and used in case of Beanstalk</p>
 </td>
 </tr>
 <tr>
@@ -127,6 +113,7 @@ string
 </em>
 </td>
 <td>
+<p>Group is a optional parameter and used in case of Kafka</p>
 </td>
 </tr>
 <tr>
@@ -137,6 +124,7 @@ string
 </em>
 </td>
 <td>
+<p>Topic is a optional parameter and used in case of Kafka</p>
 </td>
 </tr>
 </tbody>
@@ -189,6 +177,8 @@ string
 </em>
 </td>
 <td>
+<p>Type contains the user-specified Queue type
+Type can be RABITMQ/BEANSTALK/NATS/SQS</p>
 </td>
 </tr>
 <tr>
@@ -201,6 +191,7 @@ ListOptions
 </em>
 </td>
 <td>
+<p>Option contains Queue Details</p>
 </td>
 </tr>
 <tr>
@@ -211,6 +202,7 @@ int32
 </em>
 </td>
 <td>
+<p>MinPods for deployment</p>
 </td>
 </tr>
 <tr>
@@ -221,6 +213,7 @@ int32
 </em>
 </td>
 <td>
+<p>MaxPods for deployment</p>
 </td>
 </tr>
 <tr>
@@ -233,6 +226,7 @@ ScaleSpec
 </em>
 </td>
 <td>
+<p>ScaleUp contains scale up policy</p>
 </td>
 </tr>
 <tr>
@@ -245,6 +239,7 @@ ScaleSpec
 </em>
 </td>
 <td>
+<p>ScaleDown contains scale down policy</p>
 </td>
 </tr>
 <tr>
@@ -255,6 +250,7 @@ string
 </em>
 </td>
 <td>
+<p>Secrets contains secret name. Pass secure connection uri using secrets</p>
 </td>
 </tr>
 <tr>
@@ -265,6 +261,7 @@ string
 </em>
 </td>
 <td>
+<p>Deployment contains deployment name which user want to scale</p>
 </td>
 </tr>
 <tr>
@@ -277,6 +274,7 @@ Kubernetes core/v1.Container
 </em>
 </td>
 <td>
+<p>AppSpec contains deployment specification used same as deployment file (optional)</p>
 </td>
 </tr>
 <tr>
@@ -287,6 +285,7 @@ map[string]string
 </em>
 </td>
 <td>
+<p>Labels contains key value pair for deployment (optional)</p>
 </td>
 </tr>
 <tr>
@@ -299,6 +298,7 @@ Kubernetes apps/v1.DeploymentStrategy
 </em>
 </td>
 <td>
+<p>Strategy contains deployment strategy (optional)</p>
 </td>
 </tr>
 <tr>
@@ -311,6 +311,7 @@ Kubernetes apps/v1.DeploymentStrategy
 </em>
 </td>
 <td>
+<p>Volume cotains a list of volume (optional)</p>
 </td>
 </tr>
 <tr>
@@ -321,6 +322,7 @@ bool
 </em>
 </td>
 <td>
+<p>Autopilot is a bool value. false means it only auto scale deployment and true means it will manage the entire life cycle of deployment</p>
 </td>
 </tr>
 </table>
@@ -365,6 +367,8 @@ string
 </em>
 </td>
 <td>
+<p>Type contains the user-specified Queue type
+Type can be RABITMQ/BEANSTALK/NATS/SQS</p>
 </td>
 </tr>
 <tr>
@@ -377,6 +381,7 @@ ListOptions
 </em>
 </td>
 <td>
+<p>Option contains Queue Details</p>
 </td>
 </tr>
 <tr>
@@ -387,6 +392,7 @@ int32
 </em>
 </td>
 <td>
+<p>MinPods for deployment</p>
 </td>
 </tr>
 <tr>
@@ -397,6 +403,7 @@ int32
 </em>
 </td>
 <td>
+<p>MaxPods for deployment</p>
 </td>
 </tr>
 <tr>
@@ -409,6 +416,7 @@ ScaleSpec
 </em>
 </td>
 <td>
+<p>ScaleUp contains scale up policy</p>
 </td>
 </tr>
 <tr>
@@ -421,6 +429,7 @@ ScaleSpec
 </em>
 </td>
 <td>
+<p>ScaleDown contains scale down policy</p>
 </td>
 </tr>
 <tr>
@@ -431,6 +440,7 @@ string
 </em>
 </td>
 <td>
+<p>Secrets contains secret name. Pass secure connection uri using secrets</p>
 </td>
 </tr>
 <tr>
@@ -441,6 +451,7 @@ string
 </em>
 </td>
 <td>
+<p>Deployment contains deployment name which user want to scale</p>
 </td>
 </tr>
 <tr>
@@ -453,6 +464,7 @@ Kubernetes core/v1.Container
 </em>
 </td>
 <td>
+<p>AppSpec contains deployment specification used same as deployment file (optional)</p>
 </td>
 </tr>
 <tr>
@@ -463,6 +475,7 @@ map[string]string
 </em>
 </td>
 <td>
+<p>Labels contains key value pair for deployment (optional)</p>
 </td>
 </tr>
 <tr>
@@ -475,6 +488,7 @@ Kubernetes apps/v1.DeploymentStrategy
 </em>
 </td>
 <td>
+<p>Strategy contains deployment strategy (optional)</p>
 </td>
 </tr>
 <tr>
@@ -487,6 +501,7 @@ Kubernetes apps/v1.DeploymentStrategy
 </em>
 </td>
 <td>
+<p>Volume cotains a list of volume (optional)</p>
 </td>
 </tr>
 <tr>
@@ -497,6 +512,7 @@ bool
 </em>
 </td>
 <td>
+<p>Autopilot is a bool value. false means it only auto scale deployment and true means it will manage the entire life cycle of deployment</p>
 </td>
 </tr>
 </tbody>
@@ -526,10 +542,7 @@ bool
 </em>
 </td>
 <td>
-<p>INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-Important: Run &ldquo;operator-sdk generate k8s&rdquo; to regenerate code after modifying this file
-Add custom validation using kubebuilder tags: <a href="https://book-v1.book.kubebuilder.io/beyond_basics/generating_crd.html">https://book-v1.book.kubebuilder.io/beyond_basics/generating_crd.html</a>
-Nodes are the names of the memcached pods</p>
+<p>Nodes are the names of the pods</p>
 </td>
 </tr>
 </tbody>
@@ -559,6 +572,7 @@ int32
 </em>
 </td>
 <td>
+<p>Threshold is the amount of messages in queue</p>
 </td>
 </tr>
 <tr>
@@ -569,6 +583,7 @@ int32
 </em>
 </td>
 <td>
+<p>Amount is the number by which you want to scale</p>
 </td>
 </tr>
 </tbody>
