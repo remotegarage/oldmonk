@@ -72,16 +72,6 @@ spec:
  - [x] Nats.io (Not Tested on scale)
  - [ ] Kafka
 
- ## Prerequisites
-
-  - [git](#)
-  - [go](#) version v1.13+.
-  - [mercurial](#) version 3.9+
-  - [docker](#) version 17.03+.
-  - [kubectl](#) version v1.12.0+.
-  - Access to a Kubernetes v1.12.0+ cluster.
-  - [Operator-SDK](#)
-
 ## Get started in 5 Min
 [docs/build.md](/docs/build.md)
 
