@@ -27,7 +27,7 @@ type QueueAutoScalerSpec struct {
 // ListOptions defines the desired state of Queue
 // +k8s:openapi-gen=true
 type ListOptions struct {
-	Uri      string `json:"uri"`
+	Uri      string `json:"uri,omitempty"`
 	Region   string `json:"region,omitempty"`
 	Type     string `json:"type,omitempty"`
 	Queue    string `json:"queue,omitempty"`

@@ -27,6 +27,9 @@ func NewQueueConnection(queueType string, config *oldmonkv1.ListOptions) QueueFa
 	case "BEANSTALKD":
 		clientInterface := NewBeanstalkClient(config)
 		return clientInterface
+	case "NATS":
+		clientInterface := NewNatsClient(config)
+		return clientInterface
 	// case "KAFKA":
 	// 	clientInterface := NewKafkaClient(config)
 	// 	return clientInterface

@@ -7,6 +7,8 @@ require (
 	github.com/aws/aws-sdk-go v1.17.7
 	github.com/beanstalkd/go-beanstalk v0.0.0-20190515041346-390b03b3064a
 	github.com/go-openapi/spec v0.19.4
+	github.com/nats-io/nats-server/v2 v2.1.4 // indirect
+	github.com/nats-io/nats.go v1.9.1
 	github.com/operator-framework/operator-sdk v0.14.0
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/pflag v1.0.5
