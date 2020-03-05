@@ -24,23 +24,21 @@ According to Wikipedia:
 >
 ## What is Oldmonk
 
-Oldmonk is all about turning day 2 operations into code! Not just that, it means you start thinking about day 2 on day 1. This is a dream come true for any Operations team!
-Oldmonk leverages the strength of automation and combines it with the power of queue based workflows.
+Scale kubernetes pods based on the Queue length of a queue in a Message Queueing Service. oldmonk automatically scales the number of pods in a deployment based on observed queue length.
 
 ## Purpose
 
-The Oldmonk provides the ability to implement these queue based deployment for any resources in Kubernetes. oldmonk does not care if you have a plain Kubernetes, a cloud based Kubernetes (like GKE), or a complete PaaS platform based on Kubernetes (like OpenShift). Oldmonk also does not care how you want to structure your data, how many queue you want to use.
+Kubernetes does support custom metric scaling using Horizontal Pod Autoscaler. Before making this everyone was using HPA to scale our worker pods. Below are the reasons for moving away from HPA and making a custom resource:
 
-Oldmonk can handle straight-up (static) yaml files with the complete definition or create dynamic ones based on your templating engine. Oldmonk supports *Helm Charts*, but can easily be extended to support others.
+**TLDR;** Don't want to write and maintain custom metric exporters? Use Oldmonk to quickly start scaling your pods based on queue length with minimum effort (few kubectl commands and you are done !)
 
-These templates will be merged and processed with a set of environment-specific parameters to get a list of resource manifests. Then these manifest can be created/updated/deleted in Kubernetes.
+1. **No need to write and maintain custom metric exporters**: In case of HPA with custom metrics, the users need to write and maintain the custom metric exporters. This makes sense for HPA to support all kinds of use cases. Oldmonk comes with queue metric exporters(pollers) integrated and the whole setup can start working with 2 kubectl commands.
 
-## Docs
+2. **Fast Scaling**: Everyone wanted to achieve super fast near real time scaling. As soon as a job comes in queue the containers should scale if needed. The concurrency, speed and interval of sync have been made configurable to keep the API calls to minimum.
 
- - [Oldmonk CRD API Reference](https://oldmonk.netlify.com/)
+3. **Platform Independent**: Oldmonk does not care if you have a plain Kubernetes, a cloud based Kubernetes (like GKE), or a complete PaaS platform based on Kubernetes (like OpenShift). Oldmonk also does not care how you want to structure your data, how many queue you want to use.
 
 ## Example
-
 
 The configuration is described in the QueueAutoScaler CRD, here is an example:
 
@@ -85,36 +83,38 @@ spec:
   - [Operator-SDK](#)
 
 ## Get started in 5 Min
-Install [Operator sdk](https://github.com/operator-framework/operator-sdk/blob/master/doc/user/install-operator-sdk.md), create a [GKE cluster](https://cloud.google.com/kubernetes-engine/docs/how-to/creating-a-cluster) and connect cluster
- ```bash
- cd ./demo
- # Start beanstalkd container using docker-compose
- docker-compose up -d
- cd ../
- make manager
- make install
- operator-sdk up local
- # Run it and Open a new terminal
- # Terminal  2
- watch kubectl get deployment
- # Terminal  3
- watch kubectl get QueueAutoScaler
- # Terminal  4
- kubectl apply -f example/demo/demo.yaml #custom resource for demo we are only deploying nginx image but in real case it's your worker image
- # Open http://127.0.0.1 and add job in default tube. cross the thresold of 4 and check terminal 1 log and also get deployment watch
- # After verifing the autoscale delete all jobs from default tube and again watch terminal1 and deployment
- kubectl delete -f example/demo/demo.yaml
- # It will also delete the deployment with crd defination
+[docs/build.md](/docs/build.md)
 
- ```
+### Install
+Running the below script will create the Oldmonk [CRD](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/) and start the controller. The controller watches over all the specified CRD and scales the Kubernetes deployments based on the specification.
+
+```bash
+make install
+```
+
+### Verify Installation
+Check the QueueAutoScaler resource is accessible using kubectl
+
+```bash
+kubectl get QueueAutoScaler
+```
+
+
+### Examples / Demos
+Do install the controller before going with the example. We've created several examples for you to test out Oldmonk. See [EXAMPLES](example/) for details.
+
+- Create Deployment that needs to scale based on queue length.
+```bash
+kubectl create -f example/demo/worker.yaml
+```
+
+- Create `Oldmonk object (lifecycle)` that will start scaling the `demoapp` based on SQS queue length.
+```bash
+kubectl create -f example/sqs.yaml
+```
 
 [![asciicast](https://asciinema.org/a/yh718d1AAyhiVAS9CyqstecAz.svg)](https://asciinema.org/a/yh718d1AAyhiVAS9CyqstecAz)
 
-
-
-## Examples / Demos
-
-We've created several examples for you to test out Oldmonk. See [EXAMPLES](example/) for details.
 
 ## Monitoring
 
@@ -152,33 +152,9 @@ kubectl exec `POD-NAME` curl localhost:8383/metrics  -n `NAMESPACE`
 
 (e.g. `kubectl exec oldmonk-operator-5b9b664cfc-6rdrh curl localhost:8383/metrics  -n oldmonk-operator`)
 
-## Deploying to Kubernetes
-
-```
-#Replace image from Makefile
-make docker-build
-make docker-push
-make install
-
-```
-
-## Deploying CRD
-
-```
-kubectl apply -f config/beanstalk.yaml
-
-```
-
-
-### Vanilla Manifests
-
-You have to first clone or download the repository contents. The kubernetes deployment and files are provided inside `deploy/crd/` folder.
-
-## Help
 
 **Got a question?**
 File a GitHub [issue](https://github.com/evalsocket/oldmonk/issues), or send us an [email](mailto:evalsocket@protonmail.com).
 
 ## Ref 
-
   - [Uswitch/sqs-autoscaler-controller](https://github.com/uswitch/sqs-autoscaler-controller)

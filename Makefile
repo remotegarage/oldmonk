@@ -1,5 +1,5 @@
 # Image URL to use all building/pushing image targets
-IMG ?= gcr.io/multi-k8s-259909/oldmonk:latest
+IMG ?= evalsocket/oldmonk:latest
 
 VERSION ?= $(shell cat ./VERSION)
 PKG_PATH ?= github.com/evalsocket/oldmonk
@@ -34,7 +34,7 @@ install:
 	kubectl apply -f deploy/service_account.yaml
 	kubectl apply -f deploy/role.yaml
 	kubectl apply -f deploy/role_binding.yaml
-	# kubectl apply -f deploy/operator.yaml
+	kubectl apply -f deploy/operator.yaml
 
 
 # Generate manifests e.g. CRD, RBAC etc.
