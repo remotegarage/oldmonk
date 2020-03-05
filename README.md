@@ -144,7 +144,12 @@ kubectl exec `POD-NAME` curl localhost:8383/metrics  -n `NAMESPACE`
 
 
 **Got a question?**
-File a GitHub [issue](https://github.com/evalsocket/oldmonk/issues), or send us an [email](mailto:evalsocket@protonmail.com).
 
-## Ref 
-  - [Uswitch/sqs-autoscaler-controller](https://github.com/uswitch/sqs-autoscaler-controller)
+Please feel free to open issues in [Github](https://github.com/evalsocket/oldmonk/issues) if you have any questions or concerns. 
+
+We hope Oldmonk is of use to you! Made with :heart: for Open source 
+
+## Thanks
+
+Thanks to kubernetes team for making [crds](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/), [Operator-sdk](https://github.com/operator-framework/operator-sdk)
+and [Uswitch/sqs-autoscaler-controller](https://github.com/uswitch/sqs-autoscaler-controller) 
