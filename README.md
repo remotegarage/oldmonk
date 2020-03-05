@@ -7,6 +7,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/evalsocket/oldmonk)](https://goreportcard.com/report/github.com/evalsocket/oldmonk)
 [![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 [![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/evalsocket/oldmonk)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/8eba3823-ba99-4c4a-bca3-8d81d347f80d/deploy-status)](https://app.netlify.com/sites/oldmonk/deploys)
 
 [![Docker Repository on Quay](https://dockeri.co/image/evalsocket/oldmonk "Docker Repository on Dockerhub")](https://dockeri.co/evalsocket/oldmonk)
 
@@ -36,7 +37,7 @@ These templates will be merged and processed with a set of environment-specific 
 
 ## Docs
 
- - [Oldmonk CRD API Reference](https://5e5c0c9e281b8f4a7d28c58d--adoring-yonath-d459b8.netlify.com/)
+ - [Oldmonk CRD API Reference](https://oldmonk.netlify.com/)
 
 ## Example
 
