@@ -1,4 +1,4 @@
-# Need to test 
+
 apiVersion: v1
 kind: Secret
 metadata:
@@ -42,3 +42,6 @@ spec:
     image: "nginx:latest"
     ports :
       - containerPort : 80
+    envFrom:
+      - secretRef:
+          name:  queue-config
