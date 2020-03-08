@@ -1,3 +1,4 @@
+# Need to test 
 apiVersion: v1
 kind: Secret
 metadata:
@@ -42,5 +43,5 @@ spec:
     ports:
       - containerPort: 80
     envFrom:
-      - secretRef:
-        name: nginx-deployment
+      - secretRef :
+          name: nginx-deployment

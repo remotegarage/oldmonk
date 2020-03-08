@@ -82,7 +82,11 @@ Running the below script will create the Oldmonk [CRD](https://kubernetes.io/doc
 
 minikube start --kubernetes-version v1.15.0 
 
-make install
+make install (kustomize Needed for this step)
+
+#Run Contoller on local
+operator-sdk up local
+
 ```
 
 ### Verify Installation

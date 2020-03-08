@@ -28,15 +28,11 @@ docker-manager:
 run: mod  manifests generate fmt vet
 	go run ./cmd/manager/main.go
 
+
 # Install CRDs into a cluster
 install:
-	kubectl apply -f deploy/crds --validate=false
-	kubectl apply -f deploy/service_account.yaml
-	kubectl apply -f deploy/role.yaml
-	kubectl apply -f deploy/role_binding.yaml
-	kubectl apply -f deploy/operator.yaml
-
-
+	kustomize build | kubectl apply -f -
+	
 # Generate manifests e.g. CRD, RBAC etc.
 manifests:
 	operator-sdk generate k8s
