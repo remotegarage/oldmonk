@@ -42,12 +42,12 @@ func (r *SqsController) GetCount() int32 {
 	resp, err := r.Client.GetQueueAttributes(sendParams)
 	if err != nil {
 		logger.Error("unable to get count", err)
-		return 0
+		return -1
 	}
 	count, err := strconv.ParseInt(*resp.Attributes["ApproximateNumberOfMessages"], 10, 64)
 	if err != nil {
 		logger.Error("unable to parse count", err)
-		return 0
+		return -1
 	}
 	return int32(count)
 }

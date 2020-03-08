@@ -79,6 +79,9 @@ spec:
 Running the below script will create the Oldmonk [CRD](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/) and start the controller. The controller watches over all the specified CRD and scales the Kubernetes deployments based on the specification.
 
 ```bash
+
+minikube start --kubernetes-version v1.15.0 
+
 make install
 ```
 

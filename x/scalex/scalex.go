@@ -110,8 +110,8 @@ func (s Scaler) ExecuteScale(ctx context.Context, scale *oldmonkv1.QueueAutoScal
 	size := c.GetCount()
 	_ = c.Close()
 	fmt.Println("Queue :", scale.Spec.Type, "And Count : ", size)
-	if size <= 0 {
-		return nil, 0, errors.Unwrap(fmt.Errorf("......"))
+	if size < 0 {
+		return nil, 0, errors.Unwrap(fmt.Errorf("Something Goes wrong with queue drivers"))
 	}
 
 	// Fetch the QueueAutoScaler instance
@@ -164,7 +164,10 @@ func (s Scaler) do(ctx context.Context) {
 				logger.Warnf("unable to perform scale, will retry:")
 				return err
 			}
-			logger.WithFields(log.Fields{"delta": delta, "desired": *deployment.Spec.Replicas, "available": deployment.Status.AvailableReplicas}).Info("Updated deployment")
+			if deployment != nil {
+				logger.WithFields(log.Fields{"delta": delta, "desired": *deployment.Spec.Replicas, "available": deployment.Status.AvailableReplicas}).Info("Updated deployment")
+			}
+
 			return nil
 		}
 		strategy := backoff.NewExponentialBackOff()

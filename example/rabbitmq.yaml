@@ -15,10 +15,8 @@ metadata:
 spec :
   type : "RABBITMQ"
   option :
-    vshost : 'zfwltqwc'
     queue : 'product-event'
     exchange : 'zoop-production'
-    key : 'product-event'
     type : 'direct'
   secrets : queue-config
   maxPods : 4
@@ -29,5 +27,5 @@ spec :
   scaleUp :
     amount : 1
     threshold : 4
-  deployment : 'demo-app'
+  deployment : 'nginx-deployment'
   autopilot : false

@@ -31,11 +31,11 @@ func NewNatsClient(config *oldmonkv1.ListOptions) *NatsController {
 func (r *NatsController) GetCount() int32 {
 	sub, err := r.Client.SubscribeSync(r.Config.Queue)
 	if err != nil {
-		return 0
+		return -1
 	}
 	count, _, err := sub.Pending()
 	if err != nil {
-		return 0
+		return -1
 	}
 	return int32(count)
 }

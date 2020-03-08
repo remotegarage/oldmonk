@@ -1,0 +1,20 @@
+# Docker compose for testing Beanstalk Queue
+---
+version: '3'
+
+services:
+  web:
+    image : evalsocket/beanstalkd-admin
+    ports:
+      - 80:80
+    environment:
+      - BEANSTALKD_HOST=beanstalkd
+    links:
+      - beanstalkd
+  beanstalkd:
+    image: evalsocket/beanstalkd
+    volumes:
+      - beanstalkd_data:/var/lib/beanstald
+
+volumes:
+  beanstalkd_data:
