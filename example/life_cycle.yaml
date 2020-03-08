@@ -4,7 +4,7 @@ metadata:
   name: queue-config
 type: Opaque
 data:
-  URI: "MTI3LjAuMC4xOjExMzAwCg=="
+  URI: "aHR0cHM6Ly9zcXMuYXAtc291dGgtMS5hbWF6b25hd3MuY29tLzEzMTIyMDIzNzA3MS90ZXN0Cg=="
 
 ---
 
@@ -13,11 +13,9 @@ kind: QueueAutoScaler
 metadata:
   name: lifecycle
 spec:
-  type : "BEANSTALKD"
+  type : "SQS"
   option :
-    uri : '127.0.0.1:11300'
-    tube: 'default'
-    key : 'current-jobs-ready'
+    region: 'ap-south-1'
   secrets : queue-config
   maxPods : 6
   minPods : 1
@@ -39,10 +37,10 @@ spec:
       maxUnavailable: 0
       maxSurge: 1
   appSpec: 
-    - name: nginx
-      image: nginx:1.15.4
-      ports:
-        - containerPort: 80
-      envFrom:
-        - secretRef:
-          name: nginx-deployment
+    name: nginx
+    image: nginx:1.15.4
+    ports:
+      - containerPort: 80
+    envFrom:
+      - secretRef:
+        name: nginx-deployment
