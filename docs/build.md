@@ -6,6 +6,7 @@
   - [go](#) version v1.13+.
   - [mercurial](#) version 3.9+
   - [docker](#) version 17.03+.
+  - [kustomize](#) version 3.5.4+.
   - [kubectl](#) version v1.12.0+.
   - Access to a Kubernetes v1.12.0+ cluster.
   - [Operator-SDK](#)
