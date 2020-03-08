@@ -39,7 +39,7 @@ func (b *BeanstalkController) GetCount() int32 {
 	states, err := b.Client.Conn.Stats()
 	if err != nil {
 		logger.Error("error in getting state", err)
-		return 0
+		return -1
 	}
 	i, err := strconv.Atoi(states[b.Config.Tube])
 	if err != nil {
