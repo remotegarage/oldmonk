@@ -1,4 +1,4 @@
-# Need to test 
+
 apiVersion: v1
 kind: Secret
 metadata:
@@ -15,14 +15,16 @@ metadata:
   name: lifecycle
 spec:
   type : "SQS"
+  policy: "TARGET"
+  targetMessagesPerWorker: 1
   option :
     region: 'ap-south-1'
   secrets : queue-config
-  maxPods : 6
-  minPods : 1
+  maxPods : 10
+  minPods : 0
   scaleDown :
     amount : 1
-    threshold : 3
+    threshold : 1
   scaleUp :
     amount : 1
     threshold : 4
@@ -42,3 +44,6 @@ spec:
     image: "nginx:latest"
     ports :
       - containerPort : 80
+    envFrom:
+      - secretRef:
+          name:  queue-config

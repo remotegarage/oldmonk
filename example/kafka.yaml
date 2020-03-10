@@ -5,6 +5,7 @@ metadata:
   name: kafka
 spec:
   type : "KAFKA"
+  policy: "THRESOLD"
   option :
     uri : '127.0.0.1:11300'
     group: 'default'
@@ -19,5 +20,6 @@ spec:
     threshold : 4
   secrets : 'hhjvjh'
   deployment : 'demo-app2'
+  autopilot : false
 
 

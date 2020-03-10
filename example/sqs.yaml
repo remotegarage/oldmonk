@@ -14,10 +14,11 @@ metadata:
   name: lifecycle
 spec:
   type : "SQS"
+  policy: "THRESOLD"
   option :
     region: 'ap-south-1'
   secrets : queue-config
-  maxPods : 4
+  maxPods : 18
   minPods : 1
   scaleDown :
     amount : 1

@@ -22,11 +22,17 @@ type QueueAutoScalerSpec struct {
 	// MaxPods for deployment
 	MaxPods int32 `json:"maxPods"`
 
+	// targetMessagesPerWorker is the number used to find number of pod needed. It's a optional parameter and used in case of policy TARGET
+	TargetMessagesPerWorker int32 `json:"targetMessagesPerWorker"`
+
 	// ScaleUp contains scale up policy
 	ScaleUp ScaleSpec `json:"scaleUp"`
 
 	// ScaleDown contains scale down policy
 	ScaleDown ScaleSpec `json:"scaleDown"`
+
+	// Policy contains name of policy possible value is THRESOLD/TARGET
+	Policy string `json:"policy"`
 
 	// Secrets contains secret name. Pass secure connection uri using secrets
 	Secrets string `json:"secrets"`
