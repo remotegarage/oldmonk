@@ -195,13 +195,15 @@ func (r *ReconcileQueueAutoScaler) Reconcile(request reconcile.Request) (reconci
 		}
 		podNames := x.GetPodNames(podList.Items)
 
-		// Update status.Nodes if needed
-		if !reflect.DeepEqual(podNames, queueAutoScaler.Status.Nodes) {
-			queueAutoScaler.Status.Nodes = podNames
-			err := r.client.Status().Update(context.TODO(), queueAutoScaler)
-			if err != nil {
-				reqLogger.Error(err, "Failed to update QueueAutoScaler status.")
-				return reconcile.Result{}, err
+		if len(podNames) > 0 {
+			// Update status.Nodes if needed
+			if !reflect.DeepEqual(podNames, queueAutoScaler.Status.Nodes) {
+				queueAutoScaler.Status.Nodes = podNames
+				err := r.client.Status().Update(context.TODO(), queueAutoScaler)
+				if err != nil {
+					reqLogger.Error(err, "Failed to update QueueAutoScaler status.")
+					return reconcile.Result{}, err
+				}
 			}
 		}
 	}
