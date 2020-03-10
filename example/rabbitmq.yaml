@@ -14,6 +14,7 @@ metadata:
   name: rabbitmq
 spec :
   type : "RABBITMQ"
+  policy: "THRESOLD"
   option :
     queue : 'product-event'
     exchange : 'zoop-production'

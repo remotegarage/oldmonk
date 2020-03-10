@@ -31,7 +31,7 @@ run: mod  manifests generate fmt vet
 
 # Install CRDs into a cluster
 install:
-	kustomize build | kubectl apply -f -
+	kustomize build ./deploy | kubectl apply -f -
 	
 # Generate manifests e.g. CRD, RBAC etc.
 manifests:

@@ -13,6 +13,7 @@ metadata:
   name: lifecycle
 spec:
   type : "BEANSTALKD"
+  policy: "THRESOLD"
   option :
     tube: 'default'
     key : 'current-jobs-ready'

@@ -227,6 +227,7 @@ func (r *ReconcileQueueAutoScaler) deploymentForDeployment(m *oldmonkv1.QueueAut
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      m.Spec.AppSpec.Name,
 			Namespace: m.Namespace,
+			Labels:    x.GetLabels(m).Spec.Labels,
 		},
 		Spec: appsv1.DeploymentSpec{
 			Replicas: &m.Spec.MinPods,

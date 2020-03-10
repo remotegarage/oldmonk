@@ -1097,6 +1097,9 @@ spec:
                   description: Uri (Don't use it's depricated). Use secrets
                   type: string
               type: object
+            policy:
+              description: Policy contains name of policy possible value is THRESOLD/TARGET
+              type: string
             scaleDown:
               description: ScaleDown contains scale down policy
               properties:
@@ -1178,6 +1181,12 @@ spec:
                     Default is RollingUpdate.
                   type: string
               type: object
+            targetMessagesPerWorker:
+              description: targetMessagesPerWorker is the number used to find number
+                of pod needed. It's a optional parameter and used in case of policy
+                TARGET
+              format: int32
+              type: integer
             type:
               description: Type contains the user-specified Queue type Type can be
                 RABITMQ/BEANSTALK/NATS/SQS
@@ -2366,9 +2375,11 @@ spec:
           - maxPods
           - minPods
           - option
+          - policy
           - scaleDown
           - scaleUp
           - secrets
+          - targetMessagesPerWorker
           - type
           type: object
         status:

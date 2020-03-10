@@ -5,6 +5,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"math"
 	"reflect"
 	"time"
 
@@ -70,17 +71,58 @@ func max(a, b int32) int32 {
 	return b
 }
 
+// convertDesiredReplicasWithRules
+func convertDesiredReplicasWithRules(desired int32, min int32, max int32) int32 {
+	if desired > max {
+		return max
+	}
+	if desired < min {
+		return min
+	}
+	return desired
+}
+
 // targetReplicas will check the desired replica for the scaling
 // It returns the int32 and error
 func (s Scaler) targetReplicas(size int32, scale *oldmonkv1.QueueAutoScaler, d *appsv1.Deployment) (int32, error) {
 	replicas := d.Status.Replicas
+	if len(scale.Spec.Policy) <= 0 {
+		scale.Spec.Policy = "THRESOLD"
+	}
+	if scale.Spec.Policy == "THRESOLD" {
+		if size > scale.Spec.ScaleUp.Threshold {
+			desired := replicas + scale.Spec.ScaleUp.Amount
+			return min(desired, scale.Spec.MaxPods), nil
+		} else if size <= scale.Spec.ScaleDown.Threshold {
+			desired := replicas - scale.Spec.ScaleDown.Amount
+			return max(desired, scale.Spec.MinPods), nil
+		}
+		return replicas, nil
+	} else if scale.Spec.Policy == "TARGET" {
+		tolerance := 0.1
+		usageRatio := float64(size) / float64(scale.Spec.TargetMessagesPerWorker)
+		if size == 0 {
+			desiredWorkers := int32(math.Ceil(usageRatio))
+			replicas = convertDesiredReplicasWithRules(desiredWorkers, scale.Spec.MinPods, scale.Spec.MaxPods)
+			return replicas, nil
+		}
+		if size > 0 {
+			// return the current replicas if the change would be too small
+			if math.Abs(1.0-usageRatio) <= tolerance {
+				return replicas, nil
+			}
+			if size < scale.Spec.TargetMessagesPerWorker {
+				return replicas, nil
+			}
 
-	if size > scale.Spec.ScaleUp.Threshold {
-		desired := replicas + scale.Spec.ScaleUp.Amount
-		return min(desired, scale.Spec.MaxPods), nil
-	} else if size <= scale.Spec.ScaleDown.Threshold {
-		desired := replicas - scale.Spec.ScaleDown.Amount
-		return max(desired, scale.Spec.MinPods), nil
+			desiredWorkers := int32(math.Ceil(usageRatio))
+			// to prevent scaling down of workers which could be doing processing
+			if desiredWorkers < replicas {
+				return replicas, nil
+			}
+			return convertDesiredReplicasWithRules(desiredWorkers, scale.Spec.MinPods, scale.Spec.MaxPods), nil
+		}
+		return replicas, nil
 	}
 	return replicas, nil
 }
@@ -124,6 +166,7 @@ func (s Scaler) ExecuteScale(ctx context.Context, scale *oldmonkv1.QueueAutoScal
 		return nil, 0, err
 	}
 
+	// Todo : Fix the error
 	// if deployment.Status.Replicas != deployment.Status.AvailableReplicas {
 	// 	return nil, 0, fmt.Errorf("deployment available replicas not at target. won't adjust")
 	// }
@@ -134,12 +177,12 @@ func (s Scaler) ExecuteScale(ctx context.Context, scale *oldmonkv1.QueueAutoScal
 	}
 
 	delta := replicas - *deployment.Spec.Replicas
-
-	deployment.Spec.Replicas = &replicas
-	if err := s.client.Update(context.TODO(), deployment); err != nil {
-		fmt.Println("unable to update deployment ")
+	if replicas != 0 {
+		deployment.Spec.Replicas = &replicas
+		if err := s.client.Update(context.TODO(), deployment); err != nil {
+			log.Error("unable to update deployment ")
+		}
 	}
-
 	return deployment, delta, nil
 }
 
@@ -154,9 +197,10 @@ func (s Scaler) do(ctx context.Context) {
 	instance := &oldmonkv1.QueueAutoScalerList{}
 	err := s.client.List(ctx, instance)
 	if err != nil {
-		fmt.Println("Error", err)
+		log.Error("Error", err)
 	}
 	for _, scaler := range instance.Items {
+		// Run This logic in a goroutine
 		logger := log.WithFields(log.Fields{"delta": ""})
 		op := func() error {
 			deployment, delta, err := s.ExecuteScale(ctx, &scaler)
