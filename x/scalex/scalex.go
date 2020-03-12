@@ -76,7 +76,7 @@ func convertDesiredReplicasWithRules(desired int32, min int32, max int32) int32 
 	if desired > max {
 		return max
 	}
-	if desired < min {
+	if desired <= min {
 		return min
 	}
 	return desired
@@ -172,17 +172,17 @@ func (s Scaler) ExecuteScale(ctx context.Context, scale *oldmonkv1.QueueAutoScal
 	// }
 
 	replicas, err := s.targetReplicas(size, scale, deployment)
+
 	if err != nil {
 		return nil, 0, err
 	}
-
 	delta := replicas - *deployment.Spec.Replicas
-	if replicas != 0 {
-		deployment.Spec.Replicas = &replicas
-		if err := s.client.Update(context.TODO(), deployment); err != nil {
-			log.Error("unable to update deployment ")
-		}
+
+	deployment.Spec.Replicas = &replicas
+	if err := s.client.Update(context.TODO(), deployment); err != nil {
+		log.Error("unable to update deployment ")
 	}
+
 	return deployment, delta, nil
 }
 
