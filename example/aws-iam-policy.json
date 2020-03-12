@@ -1,0 +1,56 @@
+// Allow access all SQS Queues
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "cloudwatch:GetMetricData",
+                "sqs:ReceiveMessage",
+                "sqs:GetQueueAttributes"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+
+// Restric access unique SQS Queue
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+          "sqs:ReceiveMessage",
+          "sqs:GetQueueAttributes"
+      ],
+      "Resource": "arn:aws:sqs:AWS_REGION:AWS_ACCOUNT_ID:QUEUE"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "cloudwatch:GetMetricData",
+      "Resource": "*"
+    }
+  ]
+}
+
+// Restric access only to SQS prefixed Queues
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+          "sqs:ReceiveMessage",
+          "sqs:GetQueueAttributes"
+      ],
+      "Resource": "arn:aws:sqs:AWS_REGION:AWS_ACCOUNT_ID:QUEUE_PREFIX-*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "cloudwatch:GetMetricData",
+      "Resource": "*"
+    }
+  ]
+}
