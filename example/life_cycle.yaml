@@ -28,12 +28,11 @@ spec:
   scaleUp :
     amount : 1
     threshold : 4
-  deployment : 'nginx-deployment'
-  autopilot : true
+  deployment : 'nginx'
   labels:
     env: dev
-    app: nginx-deployment
-    version: v1
+    app: nginx
+  autopilot : true
   strategy:
     type: RollingUpdate
     rollingUpdate:

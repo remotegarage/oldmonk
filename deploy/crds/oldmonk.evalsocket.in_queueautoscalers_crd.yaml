@@ -1055,7 +1055,8 @@ spec:
             labels:
               additionalProperties:
                 type: string
-              description: Labels contains key value pair for deployment (optional)
+              description: Labels contains key value pair for deployment (We are using
+                these labels as selctor for selecting all pods)
               type: object
             maxPods:
               description: MaxPods for deployment
@@ -2372,6 +2373,7 @@ spec:
           required:
           - autopilot
           - deployment
+          - labels
           - maxPods
           - minPods
           - option
