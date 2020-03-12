@@ -16,7 +16,6 @@ func GetPodNames(pods []corev1.Pod) []string {
 
 func GetLabels(m *oldmonkv1.QueueAutoScaler) *oldmonkv1.QueueAutoScaler {
 	m.Spec.Labels["operator-trigger"] = m.Spec.Deployment
-	m.Spec.Labels["operator-trigger-operator"] = m.Spec.AppSpec.Name
 	return m
 }
 
