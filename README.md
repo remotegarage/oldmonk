@@ -42,6 +42,7 @@ Kubernetes does support custom metric scaling using Horizontal Pod Autoscaler. B
 
 The configuration is described in the QueueAutoScaler CRD, here is an example:
 
+Beanstalk Autoscaler with Target `THRESOLD`
 ```yaml
 apiVersion: oldmonk.evalsocket.in/v1
 kind: QueueAutoScaler
@@ -52,6 +53,7 @@ spec:
   option :
     tube: 'default'
     key : 'current-jobs-ready'
+  policy: "THRESOLF"
   secrets : 'rabbitmq'
   maxPods : 6
   minPods : 1
@@ -61,6 +63,26 @@ spec:
   scaleUp :
     amount : 1
     threshold : 4
+  deployment : 'demo-app'
+  autopilot : false
+```
+
+Beanstalk Autoscaler with Target `Target`
+```yaml
+apiVersion: oldmonk.evalsocket.in/v1
+kind: QueueAutoScaler
+metadata:
+  name: lifecycle
+spec:
+  type : "BEANSTALKD"
+  option :
+    tube: 'default'
+    key : 'current-jobs-ready'
+  policy: "TARGET"
+  targetMessagesPerWorker: 1
+  secrets : 'rabbitmq'
+  maxPods : 6
+  minPods : 1
   deployment : 'demo-app'
   autopilot : false
 ```

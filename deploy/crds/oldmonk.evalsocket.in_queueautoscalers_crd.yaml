@@ -2375,11 +2375,7 @@ spec:
           - maxPods
           - minPods
           - option
-          - policy
-          - scaleDown
-          - scaleUp
           - secrets
-          - targetMessagesPerWorker
           - type
           type: object
         status:
