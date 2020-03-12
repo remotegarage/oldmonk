@@ -19,7 +19,10 @@ spec:
     amount : 1
     threshold : 4
   secrets : 'hhjvjh'
-  deployment : 'demo-app2'
+  deployment : 'nginx'
+  labels:
+    env: dev
+    app: nginx
   autopilot : false
 
 

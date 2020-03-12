@@ -26,6 +26,9 @@ spec:
   scaleUp :
     amount : 1
     threshold : 4
-  deployment : 'nginx-deployment'
+  deployment : 'nginx'
+  labels:
+    env: dev
+    app: nginx
   autopilot : false
   

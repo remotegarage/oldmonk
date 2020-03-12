@@ -63,7 +63,10 @@ spec:
   scaleUp :
     amount : 1
     threshold : 4
-  deployment : 'demo-app'
+  deployment : 'nginx'
+  labels:
+    env: dev
+    app: nginx
   autopilot : false
 ```
 
@@ -83,7 +86,10 @@ spec:
   secrets : 'rabbitmq'
   maxPods : 6
   minPods : 1
-  deployment : 'demo-app'
+  deployment : 'nginx'
+  labels:
+    env: dev
+    app: nginx
   autopilot : false
 ```
 

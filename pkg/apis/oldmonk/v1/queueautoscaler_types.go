@@ -43,8 +43,8 @@ type QueueAutoScalerSpec struct {
 	// AppSpec contains deployment specification used same as deployment file (optional)
 	AppSpec corev1.Container `json:"appSpec,omitempty"`
 
-	// Labels contains key value pair for deployment (optional)
-	Labels map[string]string `json:"labels,omitempty"`
+	// Labels contains key value pair for deployment (We are using these labels as selctor for selecting all pods)
+	Labels map[string]string `json:"labels"`
 
 	// Strategy contains deployment strategy (optional)
 	Strategy appsv1.DeploymentStrategy `json:"strategy,omitempty"`
