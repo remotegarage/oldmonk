@@ -16,7 +16,6 @@ spec:
       serviceAccountName: oldmonk
       containers:
         - name: oldmonk
-          # Replace this with the built image name
           image: evalsocket/oldmonk:latest
           command:
           - oldmonk
