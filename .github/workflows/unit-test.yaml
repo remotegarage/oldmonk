@@ -34,11 +34,11 @@ jobs:
     - name: Unit Test
       run: go test ./...
     
-    - name: operator-sdk Docker build
-      uses: xunholy/operator-sdk-action@master
-      with:
-          image: evalsocket/oldmonk
-          tag: latest
+    - name: Build Operator
+      run: |
+        curl -L -o /operator-sdk "https://github.com/operator-framework/operator-sdk/releases/download/${RELEASE_VERSION}/operator-sdk-${RELEASE_VERSION}-x86_64-linux-gnu"
+        chmod +x /operator-sdk
+        make docker-build
 
     - uses: jerray/publish-docker-action@master
       with:
