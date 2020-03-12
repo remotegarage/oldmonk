@@ -1,0 +1,64 @@
+kind: Deployment
+apiVersion: {{ template "deployment.apiVersion" . }}
+metadata:
+  name: {{ template "oldmonk.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "oldmonk.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "oldmonk.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- if .Values.podAnnotations }}
+      annotations:
+        {{- .Values.podAnnotations | toYaml | trimSuffix "\n" | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "oldmonk.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ template "oldmonk.serviceAccountName" . }}
+      containers:
+      - name: oldmonk
+        image: {{ .Values.image }}:{{ .Values.imageTag }}
+        imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
+        command:
+          - oldmonk
+        env:
+          - name: WATCH_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: OPERATOR_NAME
+            value: "oldmonk"
+          {{- range $key, $value := .Values.options }}
+          - name: {{ $key }}
+            value: "{{ $value }}"
+          {{- end }}
+          {{- if .Values.extraEnv }}
+          {{- .Values.extraEnv | toYaml | trimSuffix "\n" | nindent 10 }}
+          {{- end }}
+        {{- if .Values.resources }}
+        resources:
+        {{- .Values.resources | toYaml | trimSuffix "\n" | nindent 10 }}
+        {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{- toYaml .Values.nodeSelector | nindent 8 }}
+      {{- end -}}
+      {{- with .Values.affinity }}
+      affinity:
+{{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+{{- toYaml . | indent 8 }}
+      {{- end }}
