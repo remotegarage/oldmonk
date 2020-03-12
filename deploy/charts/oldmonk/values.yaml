@@ -55,29 +55,6 @@ affinity: {}
 ##
 tolerations: []
 
-## Node tolerations for alertmanager scheduling to nodes with taints
-## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
-##
-queues: []
-#- name: test
-#  uri: "https://sqs.us-east-1.amazonaws.com/111111111111/test"
-#  type: "SQS"
-#  policy: "THRESOLD"
-#  option:
-#    region: 'us-east-1'
-#  minPods: 0
-#  maxPods: 20
-#  scaleDown:
-#    amount: 5
-#    threshold: 10
-#  scaleUp:
-#    amount: 5
-#    threshold: 10
-#  deployment: 'worker'
-#  labels:
-#    app: worker
-#  autopilot: false
-
 #    
 ## Oldmonk options
 ##

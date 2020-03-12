@@ -1,7 +1,3 @@
 name: oldmonk
-version: 0.0.2
+version: 0.1.0
 description: Chart of oldmonk
-maintainers:
-- name: Ganex
-  email: suporte@ganex.com.br
-icon: https://wiki.jenkins-ci.org/download/attachments/2916393/logo.png
