@@ -35,7 +35,7 @@ jobs:
       run: go test ./...
     
     - name: operator-sdk Docker build
-      uses: xunholy/operator-sdk-action
+      uses: xunholy/operator-sdk-action@master
       with:
           image: "evalsocket/oldmonk"
           tag: latest
