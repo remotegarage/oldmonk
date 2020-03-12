@@ -53,7 +53,7 @@ spec:
   option :
     tube: 'default'
     key : 'current-jobs-ready'
-  policy: "THRESOLF"
+  policy: "THRESOLD"
   secrets : 'rabbitmq'
   maxPods : 6
   minPods : 1

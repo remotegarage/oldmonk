@@ -33,3 +33,16 @@ jobs:
 
     - name: Unit Test
       run: go test ./...
+    
+    - name: operator-sdk Docker build
+      uses: xunholy/operator-sdk-action
+      with:
+          image: "evalsocket/oldmonk"
+          tag: latest
+
+    - uses: jerray/publish-docker-action@master
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        repository: evalsocket/oldmonk
+        tags: latest

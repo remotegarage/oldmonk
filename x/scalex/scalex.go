@@ -166,10 +166,11 @@ func (s Scaler) ExecuteScale(ctx context.Context, scale *oldmonkv1.QueueAutoScal
 		return nil, 0, err
 	}
 
-	// Todo : Fix the error
-	// if deployment.Status.Replicas != deployment.Status.AvailableReplicas {
-	// 	return nil, 0, fmt.Errorf("deployment available replicas not at target. won't adjust")
-	// }
+	//Todo : Fix the error
+	// After update if Replics is not equal to available replica
+	if deployment.Status.Replicas != deployment.Status.AvailableReplicas {
+		return deployment, 0, nil
+	}
 
 	replicas, err := s.targetReplicas(size, scale, deployment)
 	if err != nil {
