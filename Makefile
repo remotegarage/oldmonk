@@ -13,8 +13,7 @@ test: mod generate fmt vet manifests
 	go test $(LDFLAGS) ./pkg/... ./cmd/... -coverprofile cover.out
 
 # Build manager binary
-manager: mod manifests generate fmt vet
-	go build $(LDFLAGS) -o bin/manager $(PKG_PATH)/cmd/manager
+manager: go build $(LDFLAGS) -o build/_output/bin/oldmonk $(PKG_PATH)/cmd/manager
 
 # Build manager binary
 ci: mod generate fmt vet
