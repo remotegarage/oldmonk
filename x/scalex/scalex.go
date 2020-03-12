@@ -246,12 +246,14 @@ func (s Scaler) do(ctx context.Context) {
 			podNames := x.GetPodNames(podList.Items)
 
 			// Update status.Nodes if needed
-			if !reflect.DeepEqual(podNames, scaler.Status.Nodes) {
-				scaler.Status.Nodes = podNames
-				err := s.client.Update(context.TODO(), &scaler)
-				if err != nil {
-					logger.Error(err, "Failed to update QueueAutoScaler status.")
-					return nil
+			if len(podNames) > 0 {
+				if !reflect.DeepEqual(podNames, scaler.Status.Nodes) {
+					scaler.Status.Nodes = podNames
+					err := s.client.Update(context.TODO(), &scaler)
+					if err != nil {
+						logger.Error(err, "Failed to update Nodes name in QueueAutoScaler status.")
+						return nil
+					}
 				}
 			}
 			return nil
