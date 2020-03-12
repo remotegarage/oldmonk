@@ -37,7 +37,7 @@ jobs:
     - name: operator-sdk Docker build
       uses: xunholy/operator-sdk-action
       with:
-          image: "evalsocket/oldmonk"
+          image: evalsocket/oldmonk
           tag: latest
 
     - uses: jerray/publish-docker-action@master
