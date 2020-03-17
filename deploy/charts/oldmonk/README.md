@@ -15,11 +15,11 @@ To install the chart with the release name `my-release`:
 $ kubectl apply --validate=false \
     -f https://raw.githubusercontent.com/evalsocket/oldmonk/master/deploy/crds/oldmonk.evalsocket.in_queueautoscalers_crd.yaml
 
-## Add the Jetstack Helm repository
+## Add the evalsocket Helm repository
 $ helm repo add oldmonk https://XXXXXXXX
 
 ## Install the oldmonk helm chart
-$ helm install --name my-release --namespace kube-system oldmonk/oldmonk
+$ helm install --name my-release --namespace kube-system evalsocket/oldmonk
 ```
 > **Tip**: List all releases using `helm list`
 
