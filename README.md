@@ -42,55 +42,71 @@ Kubernetes does support custom metric scaling using Horizontal Pod Autoscaler. B
 
 The configuration is described in the QueueAutoScaler CRD, here is an example:
 
-Beanstalk Autoscaler with Target `THRESOLD`
+Beanstalk Autoscaler with Policy `THRESOLD`
 ```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: queue-config
+type: Opaque
+data:
+  URI: "MTI3LjAuMC4xOjExMzAwCg=="
+---
 apiVersion: oldmonk.evalsocket.in/v1
 kind: QueueAutoScaler
 metadata:
   name: lifecycle
 spec:
-  type : "BEANSTALKD"
-  option :
+  type: "BEANSTALKD"
+  policy: "THRESOLD"
+  option:
     tube: 'default'
-    key : 'current-jobs-ready'
-  policy: "THRESOLF"
-  secrets : 'rabbitmq'
-  maxPods : 6
-  minPods : 1
-  scaleDown :
-    amount : 1
-    threshold : 3
-  scaleUp :
-    amount : 1
-    threshold : 4
-  deployment : 'nginx'
+    key: 'current-jobs-ready'
+  secrets : queue-config
+  maxPods: 6
+  minPods: 1
+  scaleDown:
+    amount: 1
+    threshold: 3
+  scaleUp:
+    amount: 1
+    threshold: 4
+  deployment: 'nginx'
   labels:
     env: dev
     app: nginx
-  autopilot : false
+  autopilot: false
 ```
 
-Beanstalk Autoscaler with Target `Target`
+Beanstalk Autoscaler with Policy `TARGET`
 ```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: queue-config
+type: Opaque
+data:
+  URI: "MTI3LjAuMC4xOjExMzAwCg=="
+---
 apiVersion: oldmonk.evalsocket.in/v1
 kind: QueueAutoScaler
 metadata:
   name: lifecycle
 spec:
-  type : "BEANSTALKD"
-  option :
-    tube: 'default'
-    key : 'current-jobs-ready'
+  type: "BEANSTALKD"
   policy: "TARGET"
+  option:
+    tube: 'default'
+    key: 'current-jobs-ready'
   targetMessagesPerWorker: 1
-  secrets : 'rabbitmq'
-  maxPods : 6
-  minPods : 1
-  deployment : 'nginx'
+  secrets: 'rabbitmq'
+  maxPods: 6
+  minPods: 1
+  deployment: 'nginx'
   labels:
     env: dev
     app: nginx
-  autopilot : false
+  autopilot: false
 ```
 
 ### Support

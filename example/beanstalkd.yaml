@@ -5,30 +5,28 @@ metadata:
 type: Opaque
 data:
   URI: "MTI3LjAuMC4xOjExMzAwCg=="
-
 ---
 apiVersion: oldmonk.evalsocket.in/v1
 kind: QueueAutoScaler
 metadata:
   name: lifecycle
 spec:
-  type : "BEANSTALKD"
+  type: "BEANSTALKD"
   policy: "THRESOLD"
-  option :
+  option:
     tube: 'default'
-    key : 'current-jobs-ready'
-  secrets : queue-config
-  maxPods : 4
-  minPods : 1
-  scaleDown :
-    amount : 1
-    threshold : 3
-  scaleUp :
-    amount : 1
-    threshold : 4
-  deployment : 'nginx'
+    key: 'current-jobs-ready'
+  secrets: queue-config
+  maxPods: 4
+  minPods: 1
+  scaleDown:
+    amount: 1
+    threshold: 3
+  scaleUp:
+    amount: 1
+    threshold: 4
+  deployment: 'nginx'
   labels:
     env: dev
     app: nginx
-  autopilot : false
-  
+  autopilot: false

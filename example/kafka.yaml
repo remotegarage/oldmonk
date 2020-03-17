@@ -6,23 +6,21 @@ metadata:
 spec:
   type : "KAFKA"
   policy: "THRESOLD"
-  option :
-    uri : '127.0.0.1:11300'
+  option:
+    uri: '127.0.0.1:11300'
     group: 'default'
-    topic : 'current-jobs-ready'
-  maxPods : 6
-  minPods : 1
-  scaleDown :
-    amount : 1
-    threshold : 3
-  scaleUp :
-    amount : 1
-    threshold : 4
-  secrets : 'hhjvjh'
-  deployment : 'nginx'
+    topic: 'current-jobs-ready'
+  maxPods: 6
+  minPods: 1
+  scaleDown:
+    amount: 1
+    threshold: 3
+  scaleUp:
+    amount: 1
+    threshold: 4
+  secrets: 'hhjvjh'
+  deployment: 'nginx'
   labels:
     env: dev
     app: nginx
   autopilot : false
-
-

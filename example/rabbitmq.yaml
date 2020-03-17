@@ -5,30 +5,28 @@ metadata:
 type: Opaque
 data:
   URI: "YW1xcDovL29pb3dsa3hlOnEyOW1iRXQtbWdBWDk0QnQ1bk9MWktrQmYtTkVtZl9MQG1vb3NlLnJtcS5jbG91ZGFtcXAuY29tL29pb3dsa3hl"
-
 ---
-
 apiVersion: oldmonk.evalsocket.in/v1
 kind: QueueAutoScaler
 metadata:
   name: rabbitmq
-spec :
-  type : "RABBITMQ"
+spec:
+  type: "RABBITMQ"
   policy: "THRESOLD"
-  option :
-    queue : 'product-event'
-    exchange : 'zoop-production'
-    type : 'direct'
-  secrets : queue-config
-  maxPods : 4
-  minPods : 1
-  scaleDown :
-    amount : 1
-    threshold : 3
-  scaleUp :
-    amount : 1
-    threshold : 4
-  deployment : 'nginx'
+  option:
+    queue: 'product-event'
+    exchange: 'zoop-production'
+    type: 'direct'
+  secrets: queue-config
+  maxPods: 4
+  minPods: 1
+  scaleDown:
+    amount: 1
+    threshold: 3
+  scaleUp:
+    amount: 1
+    threshold: 4
+  deployment: 'nginx'
   labels:
     env: dev
     app: nginx

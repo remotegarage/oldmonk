@@ -1,0 +1,14 @@
+{{- if .Values.rbac.create -}}
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ template "oldmonk.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+subjects:
+- kind: ServiceAccount
+  name: {{ template "oldmonk.serviceAccountName" . }}
+roleRef:
+  kind: Role
+  name: {{ template "oldmonk.fullname" . }}
+  apiGroup: rbac.authorization.k8s.io
+{{- end -}}
