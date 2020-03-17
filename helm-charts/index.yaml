@@ -1,0 +1,15 @@
+apiVersion: v1
+entries:
+  oldmonk:
+  - apiVersion: v1
+    created: "2020-03-17T19:55:27.656694112Z"
+    description: Chart of oldmonk
+    digest: 59e33ce31084e0b6bdd37bc3a909d75091d66c3fb67e26071a9a77e1fbc2af94
+    maintainers:
+    - email: caio@ganex.com.br
+      name: caiohasouza
+    name: oldmonk
+    urls:
+    - https://evalsocket.github.io/oldmonk/helm-charts/oldmonk-0.1.0.tgz
+    version: 0.1.0
+generated: "2020-03-17T19:55:27.656222676Z"
