@@ -16,7 +16,7 @@ $ kubectl apply --validate=false \
     -f https://raw.githubusercontent.com/evalsocket/oldmonk/master/deploy/crds/oldmonk.evalsocket.in_queueautoscalers_crd.yaml
 
 ## Add the evalsocket Helm repository
-$ helm repo add oldmonk https://XXXXXXXX
+$ helm repo add oldmonk https://evalsocket.github.io/oldmonk/helm-charts/
 
 ## Install the oldmonk helm chart
 $ helm install --name my-release --namespace kube-system evalsocket/oldmonk
