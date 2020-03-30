@@ -45,7 +45,6 @@ func (r *RabbitmqController) GetCount() int32 {
 		false,             // noWait
 		nil,               // arguments
 	); err != nil {
-		logger.Error("Exchange Declare:", err)
 		return -1
 	}
 
@@ -55,7 +54,6 @@ func (r *RabbitmqController) GetCount() int32 {
 		false, // global
 	)
 	if err != nil {
-		logger.Error("Exchange Declare:", err)
 		return -1
 	}
 
@@ -73,8 +71,6 @@ func (r *RabbitmqController) GetCount() int32 {
 		return -1
 	}
 
-	logger.Printf("declared Queue (%d messages, %d consumers), binding to Exchange (Queue '%s')",
-		state.Messages, state.Consumers, r.Config.Queue)
 	return int32(state.Messages)
 }
 

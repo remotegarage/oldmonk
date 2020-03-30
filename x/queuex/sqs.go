@@ -46,7 +46,6 @@ func (r *SqsController) GetCount() int32 {
 	}
 	count, err := strconv.ParseInt(*resp.Attributes["ApproximateNumberOfMessages"], 10, 64)
 	if err != nil {
-		logger.Error("unable to parse count", err)
 		return -1
 	}
 	return int32(count)

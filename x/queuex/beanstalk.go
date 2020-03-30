@@ -43,7 +43,7 @@ func (b *BeanstalkController) GetCount() int32 {
 	}
 	i, err := strconv.Atoi(states[b.Config.Tube])
 	if err != nil {
-		logger.Error("error in getting converting string to int32", err)
+		return -1
 	}
 	return int32(i)
 }
