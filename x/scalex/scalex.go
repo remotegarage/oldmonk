@@ -209,7 +209,7 @@ func (s Scaler) do(ctx context.Context) {
 				return err
 			}
 			if deployment != nil {
-				logger.WithFields(log.Fields{"delta": delta, "desired": *deployment.Spec.Replicas, "available": deployment.Status.AvailableReplicas}).Info("Updated deployment")
+				logger.WithFields(log.Fields{"Delta": delta, "Desired": *deployment.Spec.Replicas, "Available": deployment.Status.AvailableReplicas, "Queue Type": scaler.Spec.Type, "Deployment ": scaler.Spec.Deployment, "Policy": scaler.Spec.Policy}).Info("Updated deployment")
 			}
 
 			return nil
