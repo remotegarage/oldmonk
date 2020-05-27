@@ -10,8 +10,8 @@ import (
 	"time"
 
 	oldmonkv1 "github.com/evalsocket/oldmonk/pkg/apis/oldmonk/v1"
-	"github.com/evalsocket/oldmonk/x"
-	"github.com/evalsocket/oldmonk/x/queuex"
+	"github.com/evalsocket/oldmonk/pkg/common"
+	"github.com/evalsocket/oldmonk/pkg/common/queuex"
 	log "github.com/sirupsen/logrus"
 	"github.com/vmg/backoff"
 
