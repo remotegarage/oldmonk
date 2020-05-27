@@ -8,17 +8,23 @@ LDFLAGS ?= -ldflags '-X ${PKG_PATH}/pkg/version.version=${VERSION} -X ${PKG_PATH
 
 all: test manager
 
+# Install all the build and lint dependencies
+setup:
+	go mod download
+	go generate -v ./...
+.PHONY: setup
+
 # Run tests
-test: mod generate fmt vet manifests
-	go test $(LDFLAGS) ./pkg/... ./cmd/... -coverprofile cover.out
+test:
+	LC_ALL=C go test $(TEST_OPTIONS) -failfast -race -coverpkg=./... -covermode=atomic -coverprofile=coverage.txt $(SOURCE_FILES) -run $(TEST_PATTERN) -timeout=2m
+.PHONY: test
 
 # Build manager binary
-manager: mod manifests generate fmt vet
-	go build $(LDFLAGS) -o bin/manager $(PKG_PATH)/cmd/manager
+build: mod fmt vet
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build $(LDFLAGS) -o build/_output/bin/oldmonk $(PKG_PATH)/cmd/manager
 
 # Build manager binary
-ci: mod generate fmt vet
-		go build $(LDFLAGS) -o bin/manager $(PKG_PATH)/cmd/manager
+ci: mod generate fmt vet build
 
 
 docker-manager:
@@ -57,7 +63,7 @@ mod:
 	go mod tidy
 
 # Build the docker image
-docker-build: mod  manifests generate fmt vet test
+docker-build: mod  manifests generate fmt vet test build
 	operator-sdk build ${IMG}
 	@echo "updating kustomize image patch file for manager resource"
 	sed -i "" 's|REPLACE_IMAGE|${IMG}|g' deploy/operator.yaml
