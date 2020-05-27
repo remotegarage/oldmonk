@@ -10,6 +10,7 @@ import (
 
 	oldmonkv1 "github.com/evalsocket/oldmonk/pkg/apis/oldmonk/v1"
 	"github.com/evalsocket/oldmonk/pkg/common/queuex"
+	"github.com/prometheus/client_golang/prometheus"
 	log "github.com/sirupsen/logrus"
 	"github.com/vmg/backoff"
 
@@ -28,9 +29,33 @@ type Scaler struct {
 	interval time.Duration
 }
 
+var (
+	loopDurationSeconds = prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Namespace: "oldmonk",
+			Subsystem: "controller",
+			Name:      "loop_duration_seconds",
+			Help:      "Number of seconds to complete the control loop succesfully, partitioned by oldmonk name and namespace",
+		},
+		[]string{"oldmonk", "namespace"},
+	)
+
+	loopCountSuccess = prometheus.NewCounterVec(
+		prometheus.CounterOpts{
+			Namespace: "oldmonk",
+			Subsystem: "controller",
+			Name:      "loop_count_success",
+			Help:      "How many times the control loop executed succesfully, partitioned by oldmonk name and namespace",
+		},
+		[]string{"oldmonk", "namespace"},
+	)
+)
+
 // NewScalex create a new Scaler object
 // It returns the Scaler
 func NewScalex(mgr manager.Manager, interval time.Duration) *Scaler {
+	prometheus.MustRegister(loopDurationSeconds)
+	prometheus.MustRegister(loopCountSuccess)
 	return &Scaler{
 		client:   mgr.GetClient(),
 		interval: interval,
@@ -195,6 +220,7 @@ func (s Scaler) Worker(jobs chan oldmonkv1.QueueAutoScaler) {
 	for scaler := range jobs {
 		// Run This logic in a goroutine
 		ctx := context.TODO()
+		now := time.Now()
 		logger := log.WithFields(log.Fields{"delta": ""})
 		op := func() error {
 			deployment, delta, err := s.ExecuteScale(ctx, &scaler)
@@ -205,7 +231,6 @@ func (s Scaler) Worker(jobs chan oldmonkv1.QueueAutoScaler) {
 			if deployment != nil {
 				logger.WithFields(log.Fields{"Delta": delta, "Desired": *deployment.Spec.Replicas, "Available": deployment.Status.AvailableReplicas, "Queue Type": scaler.Spec.Type, "Deployment ": scaler.Spec.Deployment, "Policy": scaler.Spec.Policy}).Info("Updated deployment")
 			}
-
 			return nil
 		}
 		strategy := backoff.NewExponentialBackOff()
@@ -218,5 +243,15 @@ func (s Scaler) Worker(jobs chan oldmonkv1.QueueAutoScaler) {
 			msg := fmt.Sprintf("error scaling: %s", err)
 			logger.Error(msg)
 		}
+		loopDurationSeconds.WithLabelValues(
+			scaler.Spec.Deployment,
+			scaler.Namespace,
+		).Set(time.Since(now).Seconds())
+		loopCountSuccess.WithLabelValues(
+			scaler.Spec.Deployment,
+			scaler.Namespace,
+		).Inc()
 	}
+	
+
 }
