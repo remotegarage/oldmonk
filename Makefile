@@ -21,7 +21,7 @@ test:
 
 # Build manager binary
 build: mod fmt vet
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build $(LDFLAGS) -o build/oldmonk $(PKG_PATH)/cmd/manager
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build $(LDFLAGS) -o build/_output/bin/oldmonk $(PKG_PATH)/cmd/manager
 
 # Build manager binary
 ci: mod generate fmt vet build
