@@ -6,12 +6,11 @@ import (
 	"errors"
 	"fmt"
 	"math"
-	"reflect"
 	"time"
 
 	oldmonkv1 "github.com/evalsocket/oldmonk/pkg/apis/oldmonk/v1"
-	"github.com/evalsocket/oldmonk/pkg/common"
 	"github.com/evalsocket/oldmonk/pkg/common/queuex"
+	"github.com/prometheus/client_golang/prometheus"
 	log "github.com/sirupsen/logrus"
 	"github.com/vmg/backoff"
 
@@ -30,9 +29,33 @@ type Scaler struct {
 	interval time.Duration
 }
 
+var (
+	loopDurationSeconds = prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Namespace: "oldmonk",
+			Subsystem: "controller",
+			Name:      "loop_duration_seconds",
+			Help:      "Number of seconds to complete the control loop succesfully, partitioned by oldmonk name and namespace",
+		},
+		[]string{"oldmonk", "namespace"},
+	)
+
+	loopCountSuccess = prometheus.NewCounterVec(
+		prometheus.CounterOpts{
+			Namespace: "oldmonk",
+			Subsystem: "controller",
+			Name:      "loop_count_success",
+			Help:      "How many times the control loop executed succesfully, partitioned by oldmonk name and namespace",
+		},
+		[]string{"oldmonk", "namespace"},
+	)
+)
+
 // NewScalex create a new Scaler object
 // It returns the Scaler
 func NewScalex(mgr manager.Manager, interval time.Duration) *Scaler {
+	prometheus.MustRegister(loopDurationSeconds)
+	prometheus.MustRegister(loopCountSuccess)
 	return &Scaler{
 		client:   mgr.GetClient(),
 		interval: interval,
@@ -201,6 +224,7 @@ func (s Scaler) do(ctx context.Context) {
 	}
 	for _, scaler := range instance.Items {
 		// Run This logic in a goroutine
+		now := time.Now()
 		logger := log.WithFields(log.Fields{"delta": ""})
 		op := func() error {
 			deployment, delta, err := s.ExecuteScale(ctx, &scaler)
@@ -211,7 +235,6 @@ func (s Scaler) do(ctx context.Context) {
 			if deployment != nil {
 				logger.WithFields(log.Fields{"Delta": delta, "Desired": *deployment.Spec.Replicas, "Available": deployment.Status.AvailableReplicas, "Queue Type": scaler.Spec.Type, "Deployment ": scaler.Spec.Deployment, "Policy": scaler.Spec.Policy}).Info("Updated deployment")
 			}
-
 			return nil
 		}
 		strategy := backoff.NewExponentialBackOff()
@@ -221,55 +244,17 @@ func (s Scaler) do(ctx context.Context) {
 
 		err := backoff.Retry(op, strategy)
 		if err != nil {
-
 			msg := fmt.Sprintf("error scaling: %s", err)
 			logger.Error(msg)
-
 		}
+		loopDurationSeconds.WithLabelValues(
+			scaler.Spec.Deployment,
+			scaler.Namespace,
+		).Set(time.Since(now).Seconds())
+		loopCountSuccess.WithLabelValues(
+			scaler.Spec.Deployment,
+			scaler.Namespace,
+		).Inc()
 	}
 
-	for _, scaler := range instance.Items {
-		logger := log.WithFields(log.Fields{"delta": "bnvh"})
-		op := func() error {
-			// Update the QueueAutoScaler status with the pod names
-			// List the pods for this worker's deployment
-			podList := &corev1.PodList{}
-			listOpts := []client.ListOption{
-				client.InNamespace(scaler.Namespace),
-				client.MatchingLabels(x.GetLabels(&scaler).Spec.Labels),
-			}
-			err = s.client.List(context.TODO(), podList, listOpts...)
-			if err != nil {
-				logger.Error(err, "Failed to list pods.", "QueueAutoScaler.Namespace", scaler.Namespace, "QueueAutoScaler.Name", scaler.Name)
-				return nil
-			}
-			podNames := x.GetPodNames(podList.Items)
-
-			// Update status.Nodes if needed
-			if len(podNames) > 0 {
-				if !reflect.DeepEqual(podNames, scaler.Status.Nodes) {
-					scaler.Status.Nodes = podNames
-					err := s.client.Update(context.TODO(), &scaler)
-					if err != nil {
-						logger.Error(err, "Failed to update Nodes name in QueueAutoScaler status.")
-						return nil
-					}
-				}
-			}
-			return nil
-		}
-		strategy := backoff.NewExponentialBackOff()
-		strategy.MaxInterval = time.Second
-		strategy.MaxElapsedTime = time.Second * 5
-		strategy.InitialInterval = time.Millisecond * 100
-
-		err := backoff.Retry(op, strategy)
-		if err != nil {
-
-			msg := fmt.Sprintf("error scaling: %s", err)
-			logger.Error(msg)
-
-		}
-
-	}
 }
