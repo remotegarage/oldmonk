@@ -54,4 +54,5 @@ jobs:
           repository: "evalsocket/oldmonk"
           tag_with_ref: true
           push: ${{ startsWith(github.ref, 'refs/tags/') }}
-          dockerfile : build/
+          dockerfile : build/Dockerfile
+          path: .
