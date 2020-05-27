@@ -8,10 +8,6 @@ on:
       - 'v*'
   pull_request:
 
-env:
-  TMPDIR: /home/runner/work/_temp/tmp
-  GOPRIVATE : "github.com/nirmata"
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,6 +19,7 @@ jobs:
         name: Prepare
         run: |
           mkdir -p $TMPDIR
+          
       - name: Configure git for private modules
         env:
           TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
@@ -47,8 +44,10 @@ jobs:
         name: Make Setup
         run: |
           make setup
+
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v1
+      
       -
         name: Make CI
         run: |
