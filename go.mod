@@ -1,24 +1,25 @@
-module github.com/evalsocket/oldmonk
+module github.com/remotegarage/oldmonk
 
 go 1.13
 
 require (
-	github.com/aws/aws-sdk-go v1.25.48
+	github.com/aws/aws-sdk-go v1.17.7
 	github.com/beanstalkd/go-beanstalk v0.0.0-20190515041346-390b03b3064a
+	github.com/evalsocket/oldmonk v0.1.0
 	github.com/go-logr/logr v0.1.0
 	github.com/go-openapi/spec v0.19.4
-	github.com/nats-io/nats-server/v2 v2.1.4 // indirect
 	github.com/nats-io/nats.go v1.9.1
 	github.com/operator-framework/operator-sdk v0.14.0
-	github.com/sirupsen/logrus v1.5.0
+	github.com/prometheus/client_golang v1.2.1
+	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/pflag v1.0.5
 	github.com/streadway/amqp v0.0.0-20200108173154-1c71cc93ed71
 	github.com/vmg/backoff v1.0.0
-	k8s.io/api v0.17.4
-	k8s.io/apimachinery v0.17.4
+	k8s.io/api v0.0.0
+	k8s.io/apimachinery v0.0.0
 	k8s.io/client-go v12.0.0+incompatible
-	k8s.io/kube-openapi v0.0.0-20191107075043-30be4d16710a
-	sigs.k8s.io/controller-runtime v0.5.2
+	k8s.io/kube-openapi v0.0.0-20190918143330-0270cf2f1c1d
+	sigs.k8s.io/controller-runtime v0.4.0
 )
 
 // Pinned to kubernetes-1.16.2
