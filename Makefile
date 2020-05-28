@@ -2,7 +2,7 @@
 IMG ?= evalsocket/oldmonk:latest
 
 VERSION ?= $(shell cat ./VERSION)
-PKG_PATH ?= github.com/evalsocket/oldmonk
+PKG_PATH ?= github.com/remotegarage/oldmonk
 BUILDTIME := $(shell date -u +%Y%m%d.%H%M%S)
 LDFLAGS ?= -ldflags '-X ${PKG_PATH}/pkg/version.version=${VERSION} -X ${PKG_PATH}/pkg/version.buildtime=${BUILDTIME}'
 
