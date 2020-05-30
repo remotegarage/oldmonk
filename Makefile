@@ -20,18 +20,18 @@ test:
 .PHONY: test
 
 # Build manager binary
-build: mod fmt vet
+build: mod fmt 
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build $(LDFLAGS) -o build/_output/bin/oldmonk $(PKG_PATH)/cmd/manager
 
 # Build manager binary
-ci: mod generate fmt vet build
+ci: mod generate fmt  build
 
 
 docker-manager:
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build $(LDFLAGS) -o bin/manager $(PKG_PATH)/cmd/manager
 
 # Run against the configured Kubernetes cluster in ~/.kube/config
-run: mod  manifests generate fmt vet
+run: mod  manifests generate fmt 
 	go run ./cmd/manager/main.go
 
 
@@ -50,10 +50,6 @@ manifests:
 fmt:
 	go fmt ./pkg/... ./cmd/... ./x/...
 
-# Run go vet against code
-vet:
-	go vet ./pkg/... ./cmd/...
-
 # Generate code
 generate:
 	go generate ./pkg/... ./cmd/...
@@ -63,7 +59,7 @@ mod:
 	go mod tidy
 
 # Build the docker image
-docker-build: mod  manifests generate fmt vet test build
+docker-build: mod  manifests generate fmt  test build
 	operator-sdk build ${IMG}
 	@echo "updating kustomize image patch file for manager resource"
 	sed -i "" 's|REPLACE_IMAGE|${IMG}|g' deploy/operator.yaml

@@ -3,7 +3,7 @@
 # Oldmonk - a QueueAutoScaler Operator for Kubernetes
 
 
-![Oldmonk](https://github.com/evalsocket/oldmonk/workflows/Oldmonk/badge.svg)
+![Oldmonk](https://github.com/remotegarage/oldmonk/workflows/Oldmonk/badge.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/evalsocket/oldmonk)](https://goreportcard.com/report/github.com/evalsocket/oldmonk)
 [![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 [![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/evalsocket/oldmonk)
@@ -196,7 +196,7 @@ kubectl exec `POD-NAME` curl localhost:8383/metrics  -n `NAMESPACE`
 
 **Got a question?**
 
-Please feel free to open issues in [Github](https://github.com/evalsocket/oldmonk/issues) if you have any questions or concerns. 
+Please feel free to open issues in [Github](https://github.com/remotegarage/oldmonk/issues) if you have any questions or concerns. 
 
 We hope Oldmonk is of use to you! Made with :heart: for Open source 
 
