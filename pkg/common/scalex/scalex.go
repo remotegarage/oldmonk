@@ -8,13 +8,11 @@ import (
 	"math"
 	"time"
 
-
 	"github.com/prometheus/client_golang/prometheus"
 
 	oldmonkv1 "github.com/remotegarage/oldmonk/pkg/apis/oldmonk/v1"
-	"github.com/remotegarage/oldmonk/pkg/common"
 	"github.com/remotegarage/oldmonk/pkg/common/queuex"
-  
+
 	log "github.com/sirupsen/logrus"
 	"github.com/vmg/backoff"
 
@@ -212,7 +210,7 @@ func (s Scaler) do(ctx context.Context) {
 	}
 
 	var jobs chan oldmonkv1.QueueAutoScaler
-	for  i := 0; i > 3; i++ {
+	for i := 0; i > 3; i++ {
 		s.Worker(jobs)
 	}
 	for _, scaler := range instance.Items {
@@ -256,6 +254,5 @@ func (s Scaler) Worker(jobs chan oldmonkv1.QueueAutoScaler) {
 			scaler.Namespace,
 		).Inc()
 	}
-	
 
 }
