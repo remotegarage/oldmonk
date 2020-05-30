@@ -6,12 +6,13 @@ import (
 	"errors"
 	"fmt"
 	"math"
-	"reflect"
 	"time"
 
+	"github.com/prometheus/client_golang/prometheus"
+
 	oldmonkv1 "github.com/remotegarage/oldmonk/pkg/apis/oldmonk/v1"
-	"github.com/remotegarage/oldmonk/pkg/common"
 	"github.com/remotegarage/oldmonk/pkg/common/queuex"
+
 	log "github.com/sirupsen/logrus"
 	"github.com/vmg/backoff"
 
@@ -30,9 +31,33 @@ type Scaler struct {
 	interval time.Duration
 }
 
+var (
+	loopDurationSeconds = prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Namespace: "oldmonk",
+			Subsystem: "controller",
+			Name:      "loop_duration_seconds",
+			Help:      "Number of seconds to complete the control loop succesfully, partitioned by oldmonk name and namespace",
+		},
+		[]string{"oldmonk", "namespace"},
+	)
+
+	loopCountSuccess = prometheus.NewCounterVec(
+		prometheus.CounterOpts{
+			Namespace: "oldmonk",
+			Subsystem: "controller",
+			Name:      "loop_count_success",
+			Help:      "How many times the control loop executed succesfully, partitioned by oldmonk name and namespace",
+		},
+		[]string{"oldmonk", "namespace"},
+	)
+)
+
 // NewScalex create a new Scaler object
 // It returns the Scaler
 func NewScalex(mgr manager.Manager, interval time.Duration) *Scaler {
+	prometheus.MustRegister(loopDurationSeconds)
+	prometheus.MustRegister(loopCountSuccess)
 	return &Scaler{
 		client:   mgr.GetClient(),
 		interval: interval,
@@ -101,25 +126,12 @@ func (s Scaler) targetReplicas(size int32, scale *oldmonkv1.QueueAutoScaler, d *
 	} else if scale.Spec.Policy == "TARGET" {
 		tolerance := 0.1
 		usageRatio := float64(size) / float64(scale.Spec.TargetMessagesPerWorker)
-		if size == 0 {
-			desiredWorkers := int32(math.Ceil(usageRatio))
-			replicas = convertDesiredReplicasWithRules(desiredWorkers, scale.Spec.MinPods, scale.Spec.MaxPods)
-			return replicas, nil
-		}
-		if size > 0 {
+		if size >= 0 {
 			// return the current replicas if the change would be too small
-			if math.Abs(1.0-usageRatio) <= tolerance {
+			if size < scale.Spec.TargetMessagesPerWorker || math.Abs(1.0-usageRatio) <= tolerance {
 				return replicas, nil
 			}
-			if size < scale.Spec.TargetMessagesPerWorker {
-				return replicas, nil
-			}
-
 			desiredWorkers := int32(math.Ceil(usageRatio))
-			// to prevent scaling down of workers which could be doing processing
-			if desiredWorkers < replicas {
-				return replicas, nil
-			}
 			return convertDesiredReplicasWithRules(desiredWorkers, scale.Spec.MinPods, scale.Spec.MaxPods), nil
 		}
 		return replicas, nil
@@ -143,8 +155,6 @@ func (s Scaler) ExecuteScale(ctx context.Context, scale *oldmonkv1.QueueAutoScal
 
 	scale.Spec.Option.Uri = string(secret.Data["URI"])
 
-	// To-Do Set secret to env variable and remove it from crd defination
-
 	c := queuex.NewQueueConnection(scale.Spec.Type, &scale.Spec.Option)
 	if c == nil {
 		return nil, 0, fmt.Errorf("error")
@@ -166,10 +176,9 @@ func (s Scaler) ExecuteScale(ctx context.Context, scale *oldmonkv1.QueueAutoScal
 		return nil, 0, err
 	}
 
-	// Todo : Fix the error
-	// if deployment.Status.Replicas != deployment.Status.AvailableReplicas {
-	// 	return nil, 0, fmt.Errorf("deployment available replicas not at target. won't adjust")
-	// }
+	if deployment.Status.Replicas != deployment.Status.AvailableReplicas {
+		return nil, 0, nil
+	}
 
 	replicas, err := s.targetReplicas(size, scale, deployment)
 
@@ -199,8 +208,21 @@ func (s Scaler) do(ctx context.Context) {
 	if err != nil {
 		log.Error("Error", err)
 	}
+
+	var jobs chan oldmonkv1.QueueAutoScaler
+	for i := 0; i > 3; i++ {
+		s.Worker(jobs)
+	}
 	for _, scaler := range instance.Items {
+		jobs <- scaler
+	}
+}
+
+func (s Scaler) Worker(jobs chan oldmonkv1.QueueAutoScaler) {
+	for scaler := range jobs {
 		// Run This logic in a goroutine
+		ctx := context.TODO()
+		now := time.Now()
 		logger := log.WithFields(log.Fields{"delta": ""})
 		op := func() error {
 			deployment, delta, err := s.ExecuteScale(ctx, &scaler)
@@ -211,7 +233,6 @@ func (s Scaler) do(ctx context.Context) {
 			if deployment != nil {
 				logger.WithFields(log.Fields{"Delta": delta, "Desired": *deployment.Spec.Replicas, "Available": deployment.Status.AvailableReplicas, "Queue Type": scaler.Spec.Type, "Deployment ": scaler.Spec.Deployment, "Policy": scaler.Spec.Policy}).Info("Updated deployment")
 			}
-
 			return nil
 		}
 		strategy := backoff.NewExponentialBackOff()
@@ -221,55 +242,17 @@ func (s Scaler) do(ctx context.Context) {
 
 		err := backoff.Retry(op, strategy)
 		if err != nil {
-
 			msg := fmt.Sprintf("error scaling: %s", err)
 			logger.Error(msg)
-
 		}
+		loopDurationSeconds.WithLabelValues(
+			scaler.Spec.Deployment,
+			scaler.Namespace,
+		).Set(time.Since(now).Seconds())
+		loopCountSuccess.WithLabelValues(
+			scaler.Spec.Deployment,
+			scaler.Namespace,
+		).Inc()
 	}
 
-	for _, scaler := range instance.Items {
-		logger := log.WithFields(log.Fields{"delta": "bnvh"})
-		op := func() error {
-			// Update the QueueAutoScaler status with the pod names
-			// List the pods for this worker's deployment
-			podList := &corev1.PodList{}
-			listOpts := []client.ListOption{
-				client.InNamespace(scaler.Namespace),
-				client.MatchingLabels(x.GetLabels(&scaler).Spec.Labels),
-			}
-			err = s.client.List(context.TODO(), podList, listOpts...)
-			if err != nil {
-				logger.Error(err, "Failed to list pods.", "QueueAutoScaler.Namespace", scaler.Namespace, "QueueAutoScaler.Name", scaler.Name)
-				return nil
-			}
-			podNames := x.GetPodNames(podList.Items)
-
-			// Update status.Nodes if needed
-			if len(podNames) > 0 {
-				if !reflect.DeepEqual(podNames, scaler.Status.Nodes) {
-					scaler.Status.Nodes = podNames
-					err := s.client.Update(context.TODO(), &scaler)
-					if err != nil {
-						logger.Error(err, "Failed to update Nodes name in QueueAutoScaler status.")
-						return nil
-					}
-				}
-			}
-			return nil
-		}
-		strategy := backoff.NewExponentialBackOff()
-		strategy.MaxInterval = time.Second
-		strategy.MaxElapsedTime = time.Second * 5
-		strategy.InitialInterval = time.Millisecond * 100
-
-		err := backoff.Retry(op, strategy)
-		if err != nil {
-
-			msg := fmt.Sprintf("error scaling: %s", err)
-			logger.Error(msg)
-
-		}
-
-	}
 }

@@ -6,7 +6,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sqs"
-	oldmonkv1 "github.com/remotegarage/oldmonk/pkg/apis/oldmonk/v1"
+
+	oldmonkv1 "github.com/evalsocket/oldmonk/pkg/apis/oldmonk/v1"
 )
 
 // SqsController hold configration and client for sqs
@@ -49,6 +50,26 @@ func (r *SqsController) GetCount() int32 {
 		return -1
 	}
 	return int32(count)
+}
+
+func (r *SqsController) getApproximateNumberOfMessages() (int32, error) {
+	attrib := "ApproximateNumberOfMessages"
+	sendParams := &sqs.GetQueueAttributesInput{
+		QueueUrl: aws.String(r.Config.Uri), // Required
+		AttributeNames: []*string{
+			&attrib, // Required
+		},
+	}
+	resp, err := r.Client.GetQueueAttributes(sendParams)
+	if err != nil {
+		logger.Error("unable to get count", err)
+		return 0, err
+	}
+	count, err := strconv.ParseInt(*resp.Attributes["ApproximateNumberOfMessages"], 10, 64)
+	if err != nil {
+		return 0, err
+	}
+	return int32(count), nil
 }
 
 // Close will close  sqs connection
