@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/evalsocket/oldmonk/pkg/controller/queueautoscaler"
+	"github.com/remotegarage/oldmonk/pkg/controller/queueautoscaler"
 )
 
 func init() {

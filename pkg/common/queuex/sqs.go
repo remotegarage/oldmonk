@@ -6,8 +6,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sqs"
-	oldmonkv1 "github.com/evalsocket/oldmonk/pkg/apis/oldmonk/v1"
 
+	oldmonkv1 "github.com/evalsocket/oldmonk/pkg/apis/oldmonk/v1"
 )
 
 // SqsController hold configration and client for sqs

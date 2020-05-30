@@ -2,7 +2,7 @@
 package queuex
 
 import (
-	oldmonkv1 "github.com/evalsocket/oldmonk/pkg/apis/oldmonk/v1"
+	oldmonkv1 "github.com/remotegarage/oldmonk/pkg/apis/oldmonk/v1"
 	"github.com/streadway/amqp"
 )
 

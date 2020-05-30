@@ -1,7 +1,7 @@
 package apis
 
 import (
-	v1 "github.com/evalsocket/oldmonk/pkg/apis/oldmonk/v1"
+	v1 "github.com/remotegarage/oldmonk/pkg/apis/oldmonk/v1"
 )
 
 func init() {

@@ -5,7 +5,9 @@ go 1.13
 require (
 	github.com/aws/aws-sdk-go v1.17.7
 	github.com/beanstalkd/go-beanstalk v0.0.0-20190515041346-390b03b3064a
-	github.com/evalsocket/oldmonk v0.1.0
+
+	github.com/evalsocket/oldmonk master
+
 	github.com/go-logr/logr v0.1.0
 	github.com/go-openapi/spec v0.19.4
 	github.com/nats-io/nats.go v1.9.1

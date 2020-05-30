@@ -8,9 +8,13 @@ import (
 	"math"
 	"time"
 
-	oldmonkv1 "github.com/evalsocket/oldmonk/pkg/apis/oldmonk/v1"
-	"github.com/evalsocket/oldmonk/pkg/common/queuex"
+
 	"github.com/prometheus/client_golang/prometheus"
+
+	oldmonkv1 "github.com/remotegarage/oldmonk/pkg/apis/oldmonk/v1"
+	"github.com/remotegarage/oldmonk/pkg/common"
+	"github.com/remotegarage/oldmonk/pkg/common/queuex"
+  
 	log "github.com/sirupsen/logrus"
 	"github.com/vmg/backoff"
 

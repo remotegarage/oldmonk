@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/beanstalkd/go-beanstalk"
-	oldmonkv1 "github.com/evalsocket/oldmonk/pkg/apis/oldmonk/v1"
+	oldmonkv1 "github.com/remotegarage/oldmonk/pkg/apis/oldmonk/v1"
 )
 
 // BeanstalkController hold configration and client for beanstalkd queue
