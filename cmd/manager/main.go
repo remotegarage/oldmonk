@@ -12,9 +12,9 @@ import (
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 	"k8s.io/client-go/rest"
 
-	"github.com/evalsocket/oldmonk/pkg/apis"
-	"github.com/evalsocket/oldmonk/pkg/controller"
-	"github.com/evalsocket/oldmonk/version"
+	"github.com/remotegarage/oldmonk/pkg/apis"
+	"github.com/remotegarage/oldmonk/pkg/controller"
+	"github.com/remotegarage/oldmonk/version"
 
 	"github.com/operator-framework/operator-sdk/pkg/k8sutil"
 	kubemetrics "github.com/operator-framework/operator-sdk/pkg/kube-metrics"

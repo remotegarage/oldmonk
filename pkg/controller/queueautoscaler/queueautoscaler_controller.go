@@ -7,10 +7,9 @@ import (
 	"strconv"
 	"time"
 
-	oldmonkv1 "github.com/evalsocket/oldmonk/pkg/apis/oldmonk/v1"
+	oldmonkv1 "github.com/remotegarage/oldmonk/pkg/apis/oldmonk/v1"
 
-	"github.com/evalsocket/oldmonk/pkg/common"
-	"github.com/evalsocket/oldmonk/pkg/common/scalex"
+	"github.com/remotegarage/oldmonk/pkg/common/scalex"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	appsv1 "k8s.io/api/apps/v1"
