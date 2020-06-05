@@ -6,10 +6,10 @@ entries:
     description: Chart of oldmonk
     digest: 35df896277542800e4ebe8f2b9ad66b2e34ab301547d59315715ed607bd699f7
     maintainers:
-    - email: caio@ganex.com.br
-      name: caiohasouza
+    - email: hi@remotegarage.club
+      name: Remotegarage
     name: oldmonk
     urls:
-    - https://evalsocket.github.io/oldmonk/helm-charts/oldmonk-0.1.1.tgz
+    - https://remotegarage.github.io/oldmonk/oldmonk-0.1.1.tgz
     version: 0.1.1
 generated: "2020-03-17T20:31:11.351224642Z"
