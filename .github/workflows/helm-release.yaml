@@ -6,7 +6,7 @@ on:
     paths:
     - 'deploy/charts/oldmonk/**'
 env:
-  HELM_CHART_URL: "https://evalsocket.github.io/oldmonk/helm-charts/"
+  HELM_CHART_URL: "https://remotegarage.github.io/oldmonk/helm-charts/"
 
 jobs:
   release:
@@ -24,8 +24,8 @@ jobs:
         helm init --client-only
     - name: Check Chart Version
       run: |
-        helm repo add evalsocket ${{ env.HELM_CHART_URL }}
-        helm search evalsocket/oldmonk --version `cat deploy/charts/oldmonk/Chart.yaml | grep '^version: [[:alnum:]]' | awk '{print $2}'` > HELM_CHART_STATUS.txt
+        helm repo add remotegarage ${{ env.HELM_CHART_URL }}
+        helm search remotegarage/oldmonk --version `cat deploy/charts/oldmonk/Chart.yaml | grep '^version: [[:alnum:]]' | awk '{print $2}'` > HELM_CHART_STATUS.txt
         HELM_CHART_STATUS=`cat HELM_CHART_STATUS.txt`
         if [ "${HELM_CHART_STATUS}" != 'No results found' ]; then
           echo 'Version already exist, impossible to continue...'

@@ -17,7 +17,7 @@ jobs:
       - name: Configure git for private modules
         env:
           TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-        run: git config --global url."https://evalsocket:${TOKEN}@github.com".insteadOf "https://github.com"
+        run: git config --global url."https://remotegarage:${TOKEN}@github.com".insteadOf "https://github.com"
       -
         name: Unshallow
         run: git fetch --prune --unshallow

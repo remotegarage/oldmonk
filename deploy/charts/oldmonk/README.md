@@ -13,13 +13,13 @@ To install the chart with the release name `my-release`:
 ```console
 ## IMPORTANT: you MUST install the oldmonk CRD **before** installing the oldmonk Helm chart.
 $ kubectl apply --validate=false \
-    -f https://raw.githubusercontent.com/evalsocket/oldmonk/master/deploy/crds/oldmonk.evalsocket.in_queueautoscalers_crd.yaml
+    -f https://raw.githubusercontent.com/remotegarage/oldmonk/master/deploy/crds/oldmonk.remotegarage.in_queueautoscalers_crd.yaml
 
-## Add the evalsocket Helm repository
-$ helm repo add oldmonk https://evalsocket.github.io/oldmonk/helm-charts/
+## Add the remotegarage Helm repository
+$ helm repo add oldmonk https://remotegarage.github.io/oldmonk/helm-charts/
 
 ## Install the oldmonk helm chart
-$ helm install --name my-release --namespace kube-system evalsocket/oldmonk
+$ helm install --name my-release --namespace kube-system remotegarage/oldmonk
 ```
 > **Tip**: List all releases using `helm list`
 
@@ -39,7 +39,7 @@ The following table lists the configurable parameters of the oldmonk chart and t
 
 | Parameter | Description | Default |
 | --------- | ----------- | ------- |
-| `image` | Image name | `evalsocket/oldmonk` |
+| `image` | Image name | `remotegarage/oldmonk` |
 | `image.tag` | Image tag | `latest` |
 | `image.pullPolicy` | Image pull policy | `IfNotPresent` |
 | `serviceAccount.create` | If `true`, create a new service account | `true` |
