@@ -35,12 +35,12 @@ jobs:
       run: helm lint deploy/charts/oldmonk/
     - name: Create package
       run: |
-        mkdir -p output/helm-charts/
-        helm package deploy/charts/oldmonk/ -d output/helm-charts/
+        mkdir -p output/
+        helm package deploy/charts/oldmonk/ -d output/
     - name: Reindex repo
       run: |
         wget --quiet ${{ env.HELM_CHART_URL }}/index.yaml
-        helm repo index --merge index.yaml --url ${{ env.HELM_CHART_URL }} output/helm-charts/
+        helm repo index --merge index.yaml --url ${{ env.HELM_CHART_URL }} output/
     - name: Release
       uses: JamesIves/github-pages-deploy-action@releases/v3
       with:
