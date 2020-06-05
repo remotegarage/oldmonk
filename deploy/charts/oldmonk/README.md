@@ -16,7 +16,7 @@ $ kubectl apply --validate=false \
     -f https://raw.githubusercontent.com/remotegarage/oldmonk/master/deploy/crds/oldmonk.evalsocket.in_queueautoscalers_crd.yaml
 
 ## Add the remotegarage Helm repository
-$ helm repo add oldmonk https://remotegarage.github.io/oldmonk/helm-charts/
+$ helm repo add oldmonk https://remotegarage.github.io/oldmonk/
 
 ## Install the oldmonk helm chart
 $ helm install --name my-release --namespace kube-system remotegarage/oldmonk
