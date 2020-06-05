@@ -13,7 +13,7 @@ To install the chart with the release name `my-release`:
 ```console
 ## IMPORTANT: you MUST install the oldmonk CRD **before** installing the oldmonk Helm chart.
 $ kubectl apply --validate=false \
-    -f https://raw.githubusercontent.com/remotegarage/oldmonk/master/deploy/crds/oldmonk.remotegarage.in_queueautoscalers_crd.yaml
+    -f https://raw.githubusercontent.com/remotegarage/oldmonk/master/deploy/crds/oldmonk.evalsocket.in_queueautoscalers_crd.yaml
 
 ## Add the remotegarage Helm repository
 $ helm repo add oldmonk https://remotegarage.github.io/oldmonk/helm-charts/
