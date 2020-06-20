@@ -143,7 +143,7 @@ func (s Scaler) targetReplicas(size int32, scale *oldmonkv1.QueueAutoScaler, d *
 // It returns the updated deployment,delta and error
 func (s Scaler) ExecuteScale(ctx context.Context, scale *oldmonkv1.QueueAutoScaler) (*appsv1.Deployment, int32, error) {
 
-	// // Get Secrets
+	 // Get Secrets
 	secret := &corev1.Secret{}
 	err := s.client.Get(context.TODO(), client.ObjectKey{
 		Namespace: scale.ObjectMeta.Namespace,
@@ -157,11 +157,14 @@ func (s Scaler) ExecuteScale(ctx context.Context, scale *oldmonkv1.QueueAutoScal
 
 	c := queuex.NewQueueConnection(scale.Spec.Type, &scale.Spec.Option)
 	if c == nil {
-		return nil, 0, fmt.Errorf("error")
+		return nil, 0, fmt.Errorf("Failed to create queue autoscaler")
 	}
 	size := c.GetCount()
-	_ = c.Close()
-	fmt.Println("Queue :", scale.Spec.Type, "And Count : ", size)
+	defer func(){
+		c.Close()
+	}();
+	log.Infof("Queue type : %s and the Queue Message count is %d ",scale.Spec.Type,size)
+
 	if size < 0 {
 		return nil, 0, errors.Unwrap(fmt.Errorf("Something Goes wrong with queue drivers"))
 	}
@@ -206,7 +209,7 @@ func (s Scaler) do(ctx context.Context) {
 	instance := &oldmonkv1.QueueAutoScalerList{}
 	err := s.client.List(ctx, instance)
 	if err != nil {
-		log.Error("Error", err)
+		log.Errorf("Error %v", err)
 	}
 
 	var jobs chan oldmonkv1.QueueAutoScaler
@@ -242,8 +245,7 @@ func (s Scaler) Worker(jobs chan oldmonkv1.QueueAutoScaler) {
 
 		err := backoff.Retry(op, strategy)
 		if err != nil {
-			msg := fmt.Sprintf("error scaling: %s", err)
-			logger.Error(msg)
+			logger.Errorf("error scaling: %v", err)
 		}
 		loopDurationSeconds.WithLabelValues(
 			scaler.Spec.Deployment,
