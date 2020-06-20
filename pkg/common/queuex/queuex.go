@@ -30,9 +30,6 @@ func NewQueueConnection(queueType string, config *oldmonkv1.ListOptions) QueueFa
 	case "NATS":
 		clientInterface := NewNatsClient(config)
 		return clientInterface
-	// case "KAFKA":
-	// 	clientInterface := NewKafkaClient(config)
-	// 	return clientInterface
 	default:
 		log.Printf("type undefined")
 		return nil
