@@ -1,8 +1,8 @@
 package queuex
 
 import (
-	oldmonkv1 "github.com/remotegarage/oldmonk/pkg/apis/oldmonk/v1"
 	nats "github.com/nats-io/nats.go"
+	oldmonkv1 "github.com/remotegarage/oldmonk/pkg/apis/oldmonk/v1"
 )
 
 // NatsController hold configration and client for sqs

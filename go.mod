@@ -5,11 +5,13 @@ go 1.13
 require (
 	github.com/aws/aws-sdk-go v1.17.7
 	github.com/beanstalkd/go-beanstalk v0.0.0-20190515041346-390b03b3064a
+
 	github.com/go-logr/logr v0.1.0
 	github.com/go-openapi/spec v0.19.4
 	github.com/nats-io/nats-server/v2 v2.1.7 // indirect
 	github.com/nats-io/nats.go v1.10.0
 	github.com/operator-framework/operator-sdk v0.14.0
+	github.com/prometheus/client_golang v1.2.1
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/pflag v1.0.5
 	github.com/streadway/amqp v0.0.0-20200108173154-1c71cc93ed71

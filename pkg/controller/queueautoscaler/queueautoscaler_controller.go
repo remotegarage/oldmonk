@@ -3,13 +3,13 @@ package queueautoscaler
 import (
 	"context"
 	"os"
-	"reflect"
 	"strconv"
 	"time"
 
 	oldmonkv1 "github.com/remotegarage/oldmonk/pkg/apis/oldmonk/v1"
 
-	"github.com/remotegarage/oldmonk/pkg/common"
+	x "github.com/remotegarage/oldmonk/pkg/common"
+
 	"github.com/remotegarage/oldmonk/pkg/common/scalex"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
@@ -181,31 +181,6 @@ func (r *ReconcileQueueAutoScaler) Reconcile(request reconcile.Request) (reconci
 		}
 		log.WithValues("Request.delta", delta, "Request.desired", *deployment.Spec.Replicas, "Request.available", deployment.Status.AvailableReplicas).Info("Updated deployment")
 
-		// Update the QueueAutoScaler status with the pod names
-		// List the pods for this worker's deployment
-		podList := &corev1.PodList{}
-		listOpts := []client.ListOption{
-			client.InNamespace(queueAutoScaler.Namespace),
-			client.MatchingLabels(x.GetLabels(queueAutoScaler).Spec.Labels),
-		}
-		err = r.client.List(context.TODO(), podList, listOpts...)
-		if err != nil {
-			reqLogger.Error(err, "Failed to list pods.", "QueueAutoScaler.Namespace", queueAutoScaler.Namespace, "QueueAutoScaler.Name", queueAutoScaler.Name)
-			return reconcile.Result{}, err
-		}
-		podNames := x.GetPodNames(podList.Items)
-
-		if len(podNames) > 0 {
-			// Update status.Nodes if needed
-			if !reflect.DeepEqual(podNames, queueAutoScaler.Status.Nodes) {
-				queueAutoScaler.Status.Nodes = podNames
-				err := r.client.Status().Update(context.TODO(), queueAutoScaler)
-				if err != nil {
-					reqLogger.Error(err, "Failed to update QueueAutoScaler status.")
-					return reconcile.Result{}, err
-				}
-			}
-		}
 	}
 
 	// Add finalizer for this CR

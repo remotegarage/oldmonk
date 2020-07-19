@@ -14,6 +14,7 @@ func GetPodNames(pods []corev1.Pod) []string {
 	return podNames
 }
 
+// GetLabels return labels name
 func GetLabels(m *oldmonkv1.QueueAutoScaler) *oldmonkv1.QueueAutoScaler {
 	return m
 }
