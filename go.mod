@@ -1,20 +1,20 @@
-module github.com/evalsocket/oldmonk
+module github.com/remotegarage/oldmonk
 
 go 1.13
 
 require (
-	github.com/ahmetb/gen-crd-api-reference-docs v0.1.5 // indirect
 	github.com/aws/aws-sdk-go v1.17.7
 	github.com/beanstalkd/go-beanstalk v0.0.0-20190515041346-390b03b3064a
+	github.com/go-logr/logr v0.1.0
 	github.com/go-openapi/spec v0.19.4
-	github.com/nats-io/nats-server/v2 v2.1.4 // indirect
-	github.com/nats-io/nats.go v1.9.1
+	github.com/nats-io/nats-server/v2 v2.1.7 // indirect
+	github.com/nats-io/nats.go v1.10.0
 	github.com/operator-framework/operator-sdk v0.14.0
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/pflag v1.0.5
 	github.com/streadway/amqp v0.0.0-20200108173154-1c71cc93ed71
 	github.com/vmg/backoff v1.0.0
-	k8s.io/api v0.0.0
+	k8s.io/api v0.18.6
 	k8s.io/apimachinery v0.0.0
 	k8s.io/client-go v12.0.0+incompatible
 	k8s.io/kube-openapi v0.0.0-20190918143330-0270cf2f1c1d
