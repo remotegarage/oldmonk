@@ -1,73 +1,80 @@
+
 # Image URL to use all building/pushing image targets
-IMG ?= evalsocket/oldmonk:latest
+IMG ?= controller:latest
+# Produce CRDs that work back to Kubernetes 1.11 (no version conversion)
+CRD_OPTIONS ?= "crd:trivialVersions=true"
 
-VERSION ?= $(shell cat ./VERSION)
-PKG_PATH ?= github.com/evalsocket/oldmonk
-BUILDTIME := $(shell date -u +%Y%m%d.%H%M%S)
-LDFLAGS ?= -ldflags '-X ${PKG_PATH}/pkg/version.version=${VERSION} -X ${PKG_PATH}/pkg/version.buildtime=${BUILDTIME}'
+# Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
+ifeq (,$(shell go env GOBIN))
+GOBIN=$(shell go env GOPATH)/bin
+else
+GOBIN=$(shell go env GOBIN)
+endif
 
-all: test manager
-
-# Install all the build and lint dependencies
-setup:
-	go mod download
-	go generate -v ./...
-.PHONY: setup
+all: manager
 
 # Run tests
-test:
-	LC_ALL=C go test $(TEST_OPTIONS) -failfast -race -coverpkg=./... -covermode=atomic -coverprofile=coverage.txt $(SOURCE_FILES) -run $(TEST_PATTERN) -timeout=2m
-.PHONY: test
+test: generate fmt vet manifests
+	go test ./... -coverprofile cover.out
 
 # Build manager binary
-build: mod fmt vet
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build $(LDFLAGS) -o build/_output/bin/oldmonk $(PKG_PATH)/cmd/manager
-
-# Build manager binary
-ci: mod generate fmt vet build
-
-
-docker-manager:
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build $(LDFLAGS) -o bin/manager $(PKG_PATH)/cmd/manager
+manager: generate fmt vet
+	go build -o bin/manager main.go
 
 # Run against the configured Kubernetes cluster in ~/.kube/config
-run: mod  manifests generate fmt vet
-	go run ./cmd/manager/main.go
-
+run: generate fmt vet manifests
+	go run ./main.go
 
 # Install CRDs into a cluster
-install:
-	kustomize build ./deploy | kubectl apply -f -
-	
-# Generate manifests e.g. CRD, RBAC etc.
-manifests:
-	operator-sdk generate k8s
-	operator-sdk generate crds
-	go run github.com/ahmetb/gen-crd-api-reference-docs -api-dir ./pkg/apis -config docs/api/config.json -template-dir docs/api/template -out-file docs/api/index.html
+install: manifests
+	kustomize build config/crd | kubectl apply -f -
 
+# Uninstall CRDs from a cluster
+uninstall: manifests
+	kustomize build config/crd | kubectl delete -f -
+
+# Deploy controller in the configured Kubernetes cluster in ~/.kube/config
+deploy: manifests
+	cd config/manager && kustomize edit set image controller=${IMG}
+	kustomize build config/default | kubectl apply -f -
+
+# Generate manifests e.g. CRD, RBAC etc.
+manifests: controller-gen
+	$(CONTROLLER_GEN) $(CRD_OPTIONS) rbac:roleName=manager-role webhook paths="./..." output:crd:artifacts:config=config/crd/bases
 
 # Run go fmt against code
 fmt:
-	go fmt ./pkg/... ./cmd/... ./x/...
+	go fmt ./...
 
 # Run go vet against code
 vet:
-	go vet ./pkg/... ./cmd/...
+	go vet ./...
 
 # Generate code
-generate:
-	go generate ./pkg/... ./cmd/...
-
-# Get modendencies
-mod:
-	go mod tidy
+generate: controller-gen
+	$(CONTROLLER_GEN) object:headerFile="hack/boilerplate.go.txt" paths="./..."
 
 # Build the docker image
-docker-build: mod  manifests generate fmt vet test build
-	operator-sdk build ${IMG}
-	@echo "updating kustomize image patch file for manager resource"
-	sed -i "" 's|REPLACE_IMAGE|${IMG}|g' deploy/operator.yaml
+docker-build: test
+	docker build . -t ${IMG}
 
 # Push the docker image
 docker-push:
 	docker push ${IMG}
+
+# find or download controller-gen
+# download controller-gen if necessary
+controller-gen:
+ifeq (, $(shell which controller-gen))
+	@{ \
+	set -e ;\
+	CONTROLLER_GEN_TMP_DIR=$$(mktemp -d) ;\
+	cd $$CONTROLLER_GEN_TMP_DIR ;\
+	go mod init tmp ;\
+	go get sigs.k8s.io/controller-tools/cmd/controller-gen@v0.2.5 ;\
+	rm -rf $$CONTROLLER_GEN_TMP_DIR ;\
+	}
+CONTROLLER_GEN=$(GOBIN)/controller-gen
+else
+CONTROLLER_GEN=$(shell which controller-gen)
+endif

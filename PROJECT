@@ -1,0 +1,7 @@
+domain: remotegarage.club
+repo: github.com/remotegarage/oldmonk
+resources:
+- group: oldmonk
+  kind: QueueAutoScaler
+  version: v1
+version: "2"

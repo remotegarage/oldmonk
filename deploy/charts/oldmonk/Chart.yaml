@@ -1,7 +1,0 @@
-apiVersion: v1
-name: oldmonk
-version: 0.1.1
-description: Chart of oldmonk
-maintainers:
-- name: caiohasouza
-  email: caio@ganex.com.br

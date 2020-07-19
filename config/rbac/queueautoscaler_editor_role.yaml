@@ -1,0 +1,24 @@
+# permissions for end users to edit queueautoscalers.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: queueautoscaler-editor-role
+rules:
+- apiGroups:
+  - oldmonk.remotegarage.club
+  resources:
+  - queueautoscalers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - oldmonk.remotegarage.club
+  resources:
+  - queueautoscalers/status
+  verbs:
+  - get

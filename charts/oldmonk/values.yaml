@@ -1,0 +1,62 @@
+# Default values for fluentd.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+## Image
+##
+image: remotegarage/oldmonk
+
+## Image Tag
+##
+imageTag: latest
+
+## Specify a imagePullPolicy
+## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+##
+imagePullPolicy: IfNotPresent
+
+## ServiceAccounts
+##
+serviceAccount:
+  # Specifies whether a ServiceAccount should be created
+  create: true
+  # The name of the ServiceAccount to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+## Create RBAC roles and bindings
+rbac:
+  # Specifies whether RBAC resources should be created
+  create: true
+
+## Resource requests and limits
+## Ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources: {}
+
+## Environment variable
+##
+extraEnv: []
+
+## Pod annotations
+podAnnotations: {}
+
+## Node labels
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+
+## Pod affinity
+##
+affinity: {}
+
+## Node tolerations for alertmanager scheduling to nodes with taints
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+##
+tolerations: []
+
+#    
+## Oldmonk options
+##
+options: {}
+  # INTERVAL: "30"
