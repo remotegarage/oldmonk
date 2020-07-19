@@ -1,7 +1,0 @@
-apiVersion: oldmonk.remotegarage.club/v1
-kind: QueueAutoScaler
-metadata:
-  name: queueautoscaler-sample
-spec:
-  # Add fields here
-  foo: bar

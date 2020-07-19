@@ -17,23 +17,21 @@ limitations under the License.
 package main
 
 import (
+	"context"
 	"flag"
 	"github.com/remotegarage/oldmonk/pkg/scalex"
 	"os"
 	"strconv"
 	"time"
 
+	oldmonkv1 "github.com/remotegarage/oldmonk/api/v1"
+	"github.com/remotegarage/oldmonk/controllers"
 	"k8s.io/apimachinery/pkg/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 	ctrl "sigs.k8s.io/controller-runtime"
+	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
-
-	oldmonkv1 "github.com/remotegarage/oldmonk/api/v1"
-	"github.com/remotegarage/oldmonk/controllers"
-	x "github.com/remotegarage/oldmonk/pkg"
-
-	"github.com/remotegarage/oldmonk/pkg/scalex"
 	// +kubebuilder:scaffold:imports
 )
 
@@ -48,6 +46,8 @@ func init() {
 	_ = oldmonkv1.AddToScheme(scheme)
 	// +kubebuilder:scaffold:scheme
 }
+
+var log = logf.Log.WithName("cmd")
 
 func main() {
 	var metricsAddr string

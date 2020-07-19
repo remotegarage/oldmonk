@@ -31,9 +31,7 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
-	"sigs.k8s.io/controller-runtime/pkg/log"
-	"sigs.k8s.io/controller-runtime/pkg/manager"
-	"sigs.k8s.io/controller-runtime/pkg/reconcile"
+
 	logf "sigs.k8s.io/controller-runtime/pkg/runtime/log"
 	"time"
 )
@@ -45,7 +43,6 @@ type QueueAutoScalerReconciler struct {
 	mgr    ctrl.Manager
 	Scheme *runtime.Scheme
 }
-
 
 var log = logf.Log.WithName("controller_queueAutoScaler")
 
@@ -190,7 +187,7 @@ func (r *QueueAutoScalerReconciler) deploymentForDeployment(m *oldmonkv1.QueueAu
 	// Set Queue Based configmap and attach it to the container
 
 	// Set Deployment instance as the owner of the Deployment.
-	controllerutil.SetControllerReference(m, dep, r.scheme)
+	controllerutil.SetControllerReference(m, dep, r.Scheme)
 	return dep
 }
 
@@ -265,11 +262,11 @@ func (r *QueueAutoScalerReconciler) finalizeAutoScaler(m *oldmonkv1.QueueAutoSca
 	// Delete Deployment
 	// Check if the Deployment already exists, if not create a new one
 	deployment := &appsv1.Deployment{}
-	err := r.client.Get(context.TODO(), types.NamespacedName{Name: m.Spec.Deployment, Namespace: m.Namespace}, deployment)
+	err := r.Client.Get(context.TODO(), types.NamespacedName{Name: m.Spec.Deployment, Namespace: m.Namespace}, deployment)
 	if err != nil {
 		return err
 	}
-	err = r.client.Delete(context.TODO(), deployment)
+	err = r.Client.Delete(context.TODO(), deployment)
 	if err != nil {
 		return err
 	}
@@ -279,7 +276,7 @@ func (r *QueueAutoScalerReconciler) finalizeAutoScaler(m *oldmonkv1.QueueAutoSca
 func (r *QueueAutoScalerReconciler) addFinalizer(m *oldmonkv1.QueueAutoScaler) error {
 	m.SetFinalizers(append(m.GetFinalizers(), queueAutoScalerFinalizer))
 	// Update CR
-	err := r.client.Update(context.TODO(), m)
+	err := r.Client.Update(context.TODO(), m)
 	if err != nil {
 		return err
 	}

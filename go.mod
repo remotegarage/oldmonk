@@ -4,6 +4,7 @@ go 1.13
 
 require (
 	github.com/aws/aws-sdk-go v1.33.7
+	github.com/beanstalkd/go-beanstalk v0.1.0
 	github.com/go-logr/logr v0.1.0
 	github.com/nats-io/nats-server/v2 v2.1.7 // indirect
 	github.com/nats-io/nats.go v1.10.0

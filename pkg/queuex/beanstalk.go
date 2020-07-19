@@ -2,9 +2,9 @@
 package queuex
 
 import (
-	"strconv"
-
+	"github.com/beanstalkd/go-beanstalk"
 	oldmonkv1 "github.com/remotegarage/oldmonk/api/v1"
+	"strconv"
 )
 
 // BeanstalkController hold configration and client for beanstalkd queue
