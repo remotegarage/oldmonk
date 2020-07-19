@@ -8,10 +8,11 @@ import (
 	"math"
 	"time"
 
-	"github.com/prometheus/client_golang/prometheus"
-
 	oldmonkv1 "github.com/remotegarage/oldmonk/pkg/apis/oldmonk/v1"
+
 	"github.com/remotegarage/oldmonk/pkg/common/queuex"
+
+	"github.com/prometheus/client_golang/prometheus"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/vmg/backoff"
@@ -143,7 +144,7 @@ func (s Scaler) targetReplicas(size int32, scale *oldmonkv1.QueueAutoScaler, d *
 // It returns the updated deployment,delta and error
 func (s Scaler) ExecuteScale(ctx context.Context, scale *oldmonkv1.QueueAutoScaler) (*appsv1.Deployment, int32, error) {
 
-	 // Get Secrets
+	// Get Secrets
 	secret := &corev1.Secret{}
 	err := s.client.Get(context.TODO(), client.ObjectKey{
 		Namespace: scale.ObjectMeta.Namespace,
@@ -160,10 +161,10 @@ func (s Scaler) ExecuteScale(ctx context.Context, scale *oldmonkv1.QueueAutoScal
 		return nil, 0, fmt.Errorf("Failed to create queue autoscaler")
 	}
 	size := c.GetCount()
-	defer func(){
+	defer func() {
 		c.Close()
-	}();
-	log.Infof("Queue type : %s and the Queue Message count is %d ",scale.Spec.Type,size)
+	}()
+	log.Infof("Queue type : %s and the Queue Message count is %d ", scale.Spec.Type, size)
 
 	if size < 0 {
 		return nil, 0, errors.Unwrap(fmt.Errorf("Something Goes wrong with queue drivers"))
