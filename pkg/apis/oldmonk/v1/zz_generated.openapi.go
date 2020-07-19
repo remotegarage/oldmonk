@@ -11,9 +11,9 @@ import (
 
 func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenAPIDefinition {
 	return map[string]common.OpenAPIDefinition{
-		"github.com/evalsocket/oldmonk/pkg/apis/oldmonk/v1.ListOptions":         schema_pkg_apis_oldmonk_v1_ListOptions(ref),
-		"github.com/evalsocket/oldmonk/pkg/apis/oldmonk/v1.QueueAutoScalerSpec": schema_pkg_apis_oldmonk_v1_QueueAutoScalerSpec(ref),
-		"github.com/evalsocket/oldmonk/pkg/apis/oldmonk/v1.ScaleSpec":           schema_pkg_apis_oldmonk_v1_ScaleSpec(ref),
+		"github.com/remotegarage/oldmonk/pkg/apis/oldmonk/v1.ListOptions":         schema_pkg_apis_oldmonk_v1_ListOptions(ref),
+		"github.com/remotegarage/oldmonk/pkg/apis/oldmonk/v1.QueueAutoScalerSpec": schema_pkg_apis_oldmonk_v1_QueueAutoScalerSpec(ref),
+		"github.com/remotegarage/oldmonk/pkg/apis/oldmonk/v1.ScaleSpec":           schema_pkg_apis_oldmonk_v1_ScaleSpec(ref),
 	}
 }
 
@@ -106,7 +106,7 @@ func schema_pkg_apis_oldmonk_v1_QueueAutoScalerSpec(ref common.ReferenceCallback
 					},
 					"option": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("github.com/evalsocket/oldmonk/pkg/apis/oldmonk/v1.ListOptions"),
+							Ref: ref("github.com/remotegarage/oldmonk/pkg/apis/oldmonk/v1.ListOptions"),
 						},
 					},
 					"minPods": {
@@ -123,12 +123,12 @@ func schema_pkg_apis_oldmonk_v1_QueueAutoScalerSpec(ref common.ReferenceCallback
 					},
 					"scaleUp": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("github.com/evalsocket/oldmonk/pkg/apis/oldmonk/v1.ScaleSpec"),
+							Ref: ref("github.com/remotegarage/oldmonk/pkg/apis/oldmonk/v1.ScaleSpec"),
 						},
 					},
 					"scaleDown": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("github.com/evalsocket/oldmonk/pkg/apis/oldmonk/v1.ScaleSpec"),
+							Ref: ref("github.com/remotegarage/oldmonk/pkg/apis/oldmonk/v1.ScaleSpec"),
 						},
 					},
 					"secrets": {
@@ -190,7 +190,7 @@ func schema_pkg_apis_oldmonk_v1_QueueAutoScalerSpec(ref common.ReferenceCallback
 			},
 		},
 		Dependencies: []string{
-			"github.com/evalsocket/oldmonk/pkg/apis/oldmonk/v1.ListOptions", "github.com/evalsocket/oldmonk/pkg/apis/oldmonk/v1.ScaleSpec", "k8s.io/api/apps/v1.DeploymentStrategy", "k8s.io/api/core/v1.Container", "k8s.io/api/core/v1.Volume"},
+			"github.com/remotegarage/oldmonk/pkg/apis/oldmonk/v1.ListOptions", "github.com/remotegarage/oldmonk/pkg/apis/oldmonk/v1.ScaleSpec", "k8s.io/api/apps/v1.DeploymentStrategy", "k8s.io/api/core/v1.Container", "k8s.io/api/core/v1.Volume"},
 	}
 }
 
